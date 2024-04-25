@@ -4,21 +4,21 @@ import React, { useState } from 'react';
 import { ethers } from 'ethers';
 import { useWalletClient } from 'wagmi';
 import deployedContracts from '../../contracts/deployedContracts';
+import { CHAIN_ID } from '~~/components/constants';
 
 interface CreatorProps {
     image: string;
     name: string;
     description: string;
+    creatorWalletAddress: string;
 }
 
-const Creator: React.FC<CreatorProps> = ({ name, description }) => {
+const Creator: React.FC<CreatorProps> = ({ image, name, description, creatorWalletAddress }) => {
     const [tipAmount, setTipAmount] = useState('');
-    // const { data: hash, sendTransaction } = useSendTransaction();
     const walletClient = useWalletClient();
-
-    const contractAddress = '0x8464135c8F25Da09e49BC8782676a84730C318bC'; // Assuming local development network
-    const chainId = 31337; // Adjust for mainnet/other chains
-    const creatorWalletAddress = "0xdb56D8f4171EA4D9D06C66600630c7376a790244"; // Replace with actual creator address
+   
+    const chainId = CHAIN_ID; 
+    // const creatorWalletAddress = "0xdb56D8f4171EA4D9D06C66600630c7376a790244"; 
 
     const getContract = async () => {
         if (!walletClient.data) {
@@ -29,6 +29,7 @@ const Creator: React.FC<CreatorProps> = ({ name, description }) => {
         const provider = new ethers.BrowserProvider(walletClient.data);
         const signer = await provider.getSigner();
         const abi = deployedContracts[chainId]?.YourContract?.abi;
+        const contractAddress = deployedContracts[chainId]?.YourContract?.address;
 
         if (!abi) {
             console.error('ABI not found for YourContract on chain', chainId);
@@ -57,7 +58,11 @@ const Creator: React.FC<CreatorProps> = ({ name, description }) => {
     };
 
     return (
-        <div className="flex flex-col space-y-2 px-4 py-4 bg-gray-100 rounded-lg shadow-md">
+        <div className="flex flex-col space-y-2 px-4 py-4 bg-white rounded-lg shadow-md ">
+            {/* name */}
+            <div className="flex items-center space-x-2">
+                <img src={image} className="w-12 h-12 rounded-full" />                                       
+            </div>        
             <h2 className="text-xl font-bold text-gray-800">{name}</h2>
             <p className="text-gray-600">{description}</p>
             <div className="flex items-center space-x-2">
