@@ -24,7 +24,6 @@ interface CreatorData {
       description: 'I am a web3 developer👨‍💻',
       creatorWalletAddress: '0xdb56D8f4171EA4D9D06C66600630c7376a790244',
     },
-    // Add more creators as needed
   };
   
   export const getCreatorData = (creatorName: string): CreatorData | undefined => {
