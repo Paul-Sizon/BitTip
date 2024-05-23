@@ -7,13 +7,13 @@ import deployedContracts from '../../contracts/deployedContracts';
 import { CHAIN_ID } from '~~/components/constants';
 
 export interface CreatorProps {
-    image: string;
+    avatar_url: string;
     name: string;
     description: string;
-    creatorWalletAddress: string;
+    wallet: string;    
 }
 
-const Creator: React.FC<CreatorProps> = ({ image, name, description, creatorWalletAddress }) => {
+const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet }) => {
     const [tipAmount, setTipAmount] = useState('');
     const walletClient = useWalletClient();
    
@@ -44,7 +44,7 @@ const Creator: React.FC<CreatorProps> = ({ image, name, description, creatorWall
         if (!contract) return;
 
         try {
-            const tx = await contract.tipCreator(creatorWalletAddress, {
+            const tx = await contract.tipCreator(wallet, {
                 value: ethers.parseEther(tipAmount),
                 gasLimit: 210000,
             });
@@ -56,12 +56,13 @@ const Creator: React.FC<CreatorProps> = ({ image, name, description, creatorWall
             console.error('Error sending tip:', error);
         }
     };
+    console.log("Image URL in Creator Component:", avatar_url); // In Creator component
 
     return (
         <div className="flex flex-col space-y-2 px-4 py-4 bg-white rounded-lg shadow-md ">
             {/* name */}
             <div className="flex items-center space-x-2">
-                <img src={image} className="w-12 h-12 rounded-full" />                                       
+                <img src={avatar_url} className="w-12 h-12 rounded-full" />                                       
             </div>        
             <h2 className="text-xl font-bold text-gray-800">{name}</h2>
             <p className="text-gray-600">{description}</p>

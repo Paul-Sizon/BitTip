@@ -1,24 +1,19 @@
 'use client';
 
-import Creator from '../bittip/page'
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { getCreatorData } from './creatorRepository';
+import { CreatorData, getCreatorData } from './creatorRepository'; // Adjust the import path as necessary
+import Creator from '../bittip/page';
 
 const CreatorPage: React.FC = () => {
   const pathname = usePathname();
   const creatorName = pathname.split('/').pop();
-  const [creatorInfo, setCreatorInfo] = useState<{
-    image: string;
-    name: string;
-    description: string;
-    creatorWalletAddress: string;
-  } | null>(null);
+  const [creatorInfo, setCreatorInfo] = useState<CreatorData | null>(null);
 
   useEffect(() => {
     const fetchCreatorData = async () => {
       if (creatorName) {
-        const data = getCreatorData(creatorName);
+        const data = await getCreatorData(creatorName);
         if (data) {
           setCreatorInfo(data);
         } else {
@@ -37,10 +32,10 @@ const CreatorPage: React.FC = () => {
   return (
     <div>
       <Creator
-        image={creatorInfo.image}
+        avatar_url={creatorInfo.avatar_url}
         name={creatorInfo.name}
         description={creatorInfo.description}
-        creatorWalletAddress={creatorInfo.creatorWalletAddress}
+        wallet={creatorInfo.wallet}
       />
     </div>
   );

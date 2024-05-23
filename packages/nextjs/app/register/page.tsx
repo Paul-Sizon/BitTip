@@ -2,9 +2,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAccount } from 'wagmi';
+import { useRouter } from 'next/navigation'
+
 import { supabase } from '~~/utils/supabase/client';
 
 const ProfilePage = () => {
+  const router = useRouter();
   const [file, setFile] = useState("");
   const [cid, setCid] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -62,6 +65,7 @@ const ProfilePage = () => {
         description: profile.description,
         avatar_url: `${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`  // Assuming 'cid' is the hash of the uploaded image
       };
+      console.log("Image URL in ProfilePage Component:", `${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`);
   
       const { data, error } = await supabase
         .from('profiles')
@@ -72,6 +76,7 @@ const ProfilePage = () => {
         alert(`Could not insert profile: ${error.message}`);
       } else {
         alert('Profile inserted successfully!');
+        router.push(`/pablo`);
       }
     } catch (e) {
       console.error('Unexpected error:', e);
@@ -163,7 +168,7 @@ const ProfilePage = () => {
             src={`${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`}
             alt="Profile Avatar"
             className="mx-auto h-20 w-20 rounded-full"
-          />
+          />          
         </div>
       )}
     </div>
