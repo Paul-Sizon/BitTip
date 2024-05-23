@@ -40,6 +40,11 @@
     "lint-staged": "^13.0.3"
   },
   "dependencies": {
-    "@supabase/ui": "^0.36.5"
+    "@supabase/ui": "^0.36.5",
+    "@web3-storage/w3up-client": "^13.1.1",
+    "buffer": "^6.0.3",
+    "ipfs-http-client": "^60.0.1",
+    "ipfs-utils": "^9.0.14",
+    "next-connect": "next"
   }
 }

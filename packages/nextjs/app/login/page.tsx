@@ -1,13 +1,15 @@
 'use client';
 
-import AuthForm from '~~/components/AuthForm';
+import { useAccount } from 'wagmi'
 
 
 export default function Login() {
 
-  return (
-    <div className="flex items-center flex-col flex-grow pt-10">     
-      <AuthForm />
-    </div>
-  );
+    const account = useAccount().address
+
+    return (
+        <div>
+            {account ? <p>Hi, {account}</p> : <p>Connect to continue</p>}
+        </div>
+    );
 }

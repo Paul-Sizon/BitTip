@@ -6,7 +6,7 @@ import { useWalletClient } from 'wagmi';
 import deployedContracts from '../../contracts/deployedContracts';
 import { CHAIN_ID } from '~~/components/constants';
 
-interface CreatorProps {
+export interface CreatorProps {
     image: string;
     name: string;
     description: string;

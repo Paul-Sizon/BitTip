@@ -23,9 +23,7 @@ const Home: NextPage = () => {
             <Address address={connectedAddress} />
           </div>         
         </div>
-        {/* <AuthForm /> */}
        <div>
-
        </div>
       </div>
     </>
