@@ -58,12 +58,16 @@ const ProfilePage = () => {
   };
 
   const saveProfile = async () => {
+
+    const defaultImage = `https://robohash.org/${address}.png?set=set5`;
+    const avatarUrl = cid ? `${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}` : defaultImage;
+
     try {
       const profileData = {
         wallet: address,  // Assuming 'address' is already defined and holds the wallet address
         name: profile.name,
         description: profile.description,
-        avatar_url: `${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`  // Assuming 'cid' is the hash of the uploaded image
+        avatar_url: avatarUrl
       };
       console.log("Image URL in ProfilePage Component:", `${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`);
   
@@ -76,7 +80,7 @@ const ProfilePage = () => {
         alert(`Could not insert profile: ${error.message}`);
       } else {
         alert('Profile inserted successfully!');
-        router.push(`/pablo`);
+        router.push(`/${profile.name}`);
       }
     } catch (e) {
       console.error('Unexpected error:', e);
@@ -197,8 +201,8 @@ const ProfilePage = () => {
       <input
         type="text"
         name="creatorWalletAddress"
-        // value={profile.creatorWalletAddress || ''}
-        value={'0x2Ca3355E6e09e54bE4A70F44d6709DABA08fC786'}
+        value={profile.creatorWalletAddress || address || ''}
+        // value={'0x2Ca3355E6e09e54bE4A70F44d6709DABA08fC786'}
         readOnly
         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-500 bg-gray-100 sm:text-sm"
       />
