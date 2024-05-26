@@ -13,6 +13,7 @@ const ProfilePage = () => {
   const [cid, setCid] = useState("");
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isValid, setIsValid] = useState(true);
 
   const inputFile = useRef(null);
   const [mode, setMode] = useState("register");  // 'register' or 'update'
@@ -37,7 +38,11 @@ const ProfilePage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProfile({ ...profile, [name]: value });
+    const sanitizedValue = value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 24);
+
+    setProfile({ ...profile, [name]: sanitizedValue });
+
+    setIsValid(value === sanitizedValue);
   };
 
   const uploadFile = async (fileToUpload) => {
@@ -143,7 +148,7 @@ const ProfilePage = () => {
   return (
     <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
       {isLoading && (
-       <div className="absolute inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center">
+        <div className="absolute inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center">
           <span className="loading loading-ring loading-lg"></span>
         </div>
       )}
@@ -182,13 +187,19 @@ const ProfilePage = () => {
                 value={profile.name || ''}
                 onChange={handleInputChange}
                 placeholder="Pavel"
-                className="input input-bordered w-full max-w-xs"
+                className={`input input-bordered w-full max-w-xs ${isValid ? 'border-gray-300' : 'border-red-500'}`}
               />
               <div className="label">
                 <span className="label-text-alt text-black">
-                  Your URL will be: <strong>bittip.to/{profile.name}</strong>
+                  Your URL will be: <strong>bittip.to/{profile.name || 'yourname'}</strong>
                 </span>
+                
               </div>
+              {!isValid && (
+                  <span className="text-red-500 text-sm mt-1 text-center">
+                    Use only letters, numbers, underscores, or hyphens, up to 24 characters
+                  </span>
+                )}
             </label>
 
             <label className="form-control w-full max-w-xs">
@@ -212,8 +223,7 @@ const ProfilePage = () => {
               </div>
               <input type="text" name="creatorWalletAddress" value={profile.creatorWalletAddress || address || ''} className="input input-bordered w-full  sm:text-sm shadow-sm text-gray-500 " disabled />
               <div className="label">
-              <span className="label-text-alt text-black">only ETH for now</span>
-                {/* <span className="label-text-alt"> (only ETH for now)</span> */}
+                <span className="label-text-alt text-black">only ETH for now</span>
               </div>
             </label>
 
