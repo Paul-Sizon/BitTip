@@ -5,6 +5,7 @@ import { ethers } from 'ethers';
 import { useWalletClient } from 'wagmi';
 import deployedContracts from '../../contracts/deployedContracts';
 import { CHAIN_ID } from '~~/components/constants';
+import { Address } from '~~/components/scaffold-eth';
 
 export interface CreatorProps {
     avatar_url: string;
@@ -17,10 +18,12 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     const [usdAmount, setUsdAmount] = useState('');
     const [ethAmount, setEthAmount] = useState('');
     const [ethPrice, setEthPrice] = useState(null);
+    const [isAddressVisible, setIsAddressVisible] = useState(false);
+    const [isButtonVisible, setIsButtonVisible] = useState(true);
+
     const walletClient = useWalletClient();
 
     const chainId = CHAIN_ID;
-    // const creatorWalletAddress = "0xdb56D8f4171EA4D9D06C66600630c7376a790244"; 
 
     const getContract = async () => {
         if (!walletClient.data) {
@@ -70,9 +73,6 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
         return null;
     };
 
-
-
-
     const handleTip = async () => {
         const contract = await getContract();
         if (!contract) return;
@@ -100,6 +100,11 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
             setEthAmount('');
         }
     }, [usdAmount, ethPrice]);
+
+    const toggleAddressVisibility = () => {
+        setIsAddressVisible(true);
+        setIsButtonVisible(false);
+    };
 
     return (
         <div className="flex flex-col space-y-2 px-4 py-4 bg-white rounded-lg shadow-md ">
@@ -149,6 +154,19 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
             <button onClick={handleTip} className="mt-4 px-1 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 max-w-xs">
                 Send Tip
             </button>
+            {isButtonVisible && (
+                <button
+                    onClick={toggleAddressVisibility}
+                    className="mt-4 px-1 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 max-w-xs"
+                >
+                    Send Tip Directly
+                </button>
+            )}
+            {isAddressVisible && (
+                <div>
+                    <Address address={wallet} />
+                </div>
+            )}
         </div>
 
     );
