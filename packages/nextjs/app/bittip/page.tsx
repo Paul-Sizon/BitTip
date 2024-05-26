@@ -117,8 +117,8 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
 
 
     return (
-        <div className="flex flex-col justify-center items-center min-h-screen space-y-4">
-            <div className="flex flex-col items-center space-y-4 px-6 py-6 bg-white rounded-lg shadow-md max-w-md w-full">
+        <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
+             <div className="flex flex-col items-center space-y-4 px-6 py-6 bg-white rounded-lg shadow-md max-w-md w-full">
                 {/* User Info */}
                 <div className="flex justify-center items-center space-x-4">
                     <div className="avatar">
@@ -137,21 +137,21 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                     <button
                         type="button"
                         onClick={() => setUsdAmount("3")}
-                        className="px-4 py-2 text-sm font-medium text-center text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        className="btn "
                     >
                         $3 USD
                     </button>
                     <button
                         type="button"
                         onClick={() => setUsdAmount("5")}
-                        className="px-4 py-2 text-sm font-medium text-center text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        className="btn"
                     >
                         $5 USD
                     </button>
                     <button
                         type="button"
                         onClick={() => setUsdAmount("10")}
-                        className="px-4 py-2 text-sm font-medium text-center text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        className="btn "
                     >
                         $10 USD
                     </button>
@@ -160,8 +160,8 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                             type="number"
                             value={usdAmount}
                             onChange={(e) => setUsdAmount(e.target.value)}
-                            placeholder="Enter custom amount (USD)"
-                            className="w-full px-4 py-2 border rounded-md border-gray-300 bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="USD"
+                            className="input input-bordered w-full max-w-xs" 
                         />
                     </div>
                 </div>
@@ -169,14 +169,14 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                 {/* Equivalent ETH Amount */}
                 <div>
                     {ethAmount && (
-                        <p className="text-gray-800">Equivalent in ETH: {ethAmount}</p>
+                        <p className="text-gray-800">{usdAmount}$ ≈ {ethAmount} ETH</p>
                     )}
                 </div>
 
                 {/* Send Tip Button */}
                 <button
                     onClick={handleTip}
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700"
+                    className="btn btn-success"
                 >
                     Send Tip
                 </button>
@@ -186,17 +186,19 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
 
             {/* Send Tip Directly Button */}
             {isButtonVisible && (
+                <div className="flex flex-col items-center space-y-4 pt-16">              
                 <button
                     onClick={toggleAddressVisibility}
-                    className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
+                    className="btn btn-ghost"
                 >
-                    ...or send tip directly
+                    or send tip directly
                 </button>
+                </div>
             )}
             {/* Address Component */}
 
             {isAddressVisible && (
-                <div className="flex justify-center items-center mt-4 space-x-4">
+                <div className="flex justify-center items-center mt-4 pt-16 space-x-4">
                     <div className="flex flex-col items-center">
                         <Address address={wallet} />
                     </div>
