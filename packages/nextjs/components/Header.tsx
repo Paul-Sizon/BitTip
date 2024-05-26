@@ -20,17 +20,13 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/",
   },
   {
-    label: "BitTip",
-    href: "/bittip",
+    label: "My Profile",
+    href: "/profile"
   },
   {
-    label: "Pablo's page",
-    href: "/pablo",
+    label: "Settings",
+    href: "/settings",
   },
-  // {
-  //   label: "Login/Sign Up",
-  //   href: "/auth",
-  // },  
   {
     label: "Debug Contracts",
     href: "/debug",
@@ -50,9 +46,8 @@ export const HeaderMenuLinks = () => {
             <Link
               href={href}
               passHref
-              className={`${
-                isActive ? "bg-secondary shadow-md" : ""
-              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
+              className={`${isActive ? "bg-secondary shadow-md" : ""
+                } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
             >
               {icon}
               <span>{label}</span>

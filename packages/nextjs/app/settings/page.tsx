@@ -71,40 +71,43 @@ const ProfilePage = () => {
   };
 
   const saveProfile = async () => {
-    const confirmation = window.confirm(`Are you sure you want to ${mode === "update" ? "update" : "create"} your profile?`);
-    if (!confirmation) {
-      return;
+    if (mode === "update") {
+        const confirmation = window.confirm("Are you sure you want to update your profile?");
+        if (!confirmation) {
+            return;
+        }
     }
 
     const defaultImage = `https://robohash.org/${address}.png?set=set5`;
     const avatarUrl = cid ? `${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}` : defaultImage;
 
     try {
-      const profileData = {
-        wallet: address,  // This should be your unique identifier
-        name: profile.name,
-        description: profile.description,
-        avatar_url: profile.image || avatarUrl,
-      };
+        const profileData = {
+            wallet: address,  // This should be your unique identifier
+            name: profile.name,
+            description: profile.description,
+            avatar_url: profile.image || avatarUrl,
+        };
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .upsert(profileData, {
-          onConflict: 'wallet', // Specify the conflict resolution strategy
-        });
+        const { data, error } = await supabase
+            .from('profiles')
+            .upsert(profileData, {
+                onConflict: 'wallet', // Specify the conflict resolution strategy
+            });
 
-      if (error) {
-        console.error('Error saving profile:', error);
-        alert(`Could not save/update profile: ${error.message}`);
-      } else {
-        alert('Profile saved/updated successfully!');
-        router.push(`/${profile.name}`);
-      }
+        if (error) {
+            console.error('Error saving profile:', error);
+            alert(`Could not save/update profile: ${error.message}`);
+        } else {
+            alert('Profile saved/updated successfully!');
+            router.push(`/${profile.name}`);
+        }
     } catch (e) {
-      console.error('Unexpected error:', e);
-      alert('An unexpected error occurred');
+        console.error('Unexpected error:', e);
+        alert('An unexpected error occurred');
     }
-  };
+};
+
 
 
   const loadProfile = async (walletAddress) => {
@@ -124,7 +127,6 @@ const ProfilePage = () => {
 
     if (error) {
       console.error('Error loading profile:', error);
-      alert('Could not load profile data.');
       setIsLoading(false);
     } else if (data) {
       setCid(data.avatar_url); // Set CID from the existing avatar URL if available
