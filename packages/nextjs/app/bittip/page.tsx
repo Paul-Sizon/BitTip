@@ -42,64 +42,64 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     };
     useEffect(() => {
         const fetchEthPrice = async () => {
-          const options = {
-            method: 'GET',
-            headers: {
-              accept: 'application/json',
-              'x-cg-pro-api-key': process.env.COINGECKO_API_KEY
-            }
-          };
-    
-          try {
-            const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd', options);
-            const data = await response.json();
-            setEthPrice(data.ethereum.usd);
-          } catch (err) {
-            console.error('Error fetching ETH price:', err);
-          }
-        };
-    
-        fetchEthPrice();
-      }, []);
-      
+            const options = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    'x-cg-pro-api-key': process.env.COINGECKO_API_KEY
+                }
+            };
 
-      const convertUsdToEth = (usdAmount) => {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd', options);
+                const data = await response.json();
+                setEthPrice(data.ethereum.usd);
+            } catch (err) {
+                console.error('Error fetching ETH price:', err);
+            }
+        };
+
+        fetchEthPrice();
+    }, []);
+
+
+    const convertUsdToEth = (usdAmount) => {
         if (ethPrice) {
-          return (usdAmount / ethPrice).toFixed(18); // 18 decimals for ETH
+            return (usdAmount / ethPrice).toFixed(18); // 18 decimals for ETH
         }
         return null;
-      };
-      
+    };
 
 
 
-      const handleTip = async () => {
+
+    const handleTip = async () => {
         const contract = await getContract();
         if (!contract) return;
-    
+
         try {
-          const tx = await contract.tipCreator(wallet, {
-            value: ethers.parseEther(ethAmount.toString()), // Ensure ethAmount is a string
-            gasLimit: 210000,
-          });
-          console.log('Sending tip to $s', wallet);
-          console.log(`Transaction sent: ${tx.hash}`);
-          const receipt = await tx.wait();
-          console.log('Transaction confirmed:', receipt.confirmations);
+            const tx = await contract.tipCreator(wallet, {
+                value: ethers.parseEther(ethAmount.toString()), // Ensure ethAmount is a string
+                gasLimit: 210000,
+            });
+            console.log('Sending tip to $s', wallet);
+            console.log(`Transaction sent: ${tx.hash}`);
+            const receipt = await tx.wait();
+            console.log('Transaction confirmed:', receipt.confirmations);
         } catch (error) {
-          console.error('Error sending tip:', error);
+            console.error('Error sending tip:', error);
         }
-      };
+    };
 
 
-      useEffect(() => {
+    useEffect(() => {
         if (usdAmount) {
-          const eth = convertUsdToEth(usdAmount);
-          setEthAmount(eth);
+            const eth = convertUsdToEth(usdAmount);
+            setEthAmount(eth);
         } else {
-          setEthAmount('');
+            setEthAmount('');
         }
-      }, [usdAmount, ethPrice]);
+    }, [usdAmount, ethPrice]);
 
     return (
         <div className="flex flex-col space-y-2 px-4 py-4 bg-white rounded-lg shadow-md ">
@@ -132,20 +132,20 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                     $10 USD
                 </button>
                 <div className="flex-grow">
-                <input
-          type="number"
-           value={usdAmount}
-          onChange={(e) => setUsdAmount(e.target.value)}
-          placeholder="Enter custom amount (USD)"
-          className="px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+                    <input
+                        type="number"
+                        value={usdAmount}
+                        onChange={(e) => setUsdAmount(e.target.value)}
+                        placeholder="Enter custom amount (USD)"
+                        className="px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                 </div>
             </div>
             <div>
-        {ethAmount && (
-          <p>Equivalent in ETH: {ethAmount}</p>
-        )}
-      </div>
+                {ethAmount && (
+                    <p>Equivalent in ETH: {ethAmount}</p>
+                )}
+            </div>
             <button onClick={handleTip} className="mt-4 px-1 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 max-w-xs">
                 Send Tip
             </button>
