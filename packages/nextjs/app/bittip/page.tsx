@@ -6,6 +6,7 @@ import { useWalletClient } from 'wagmi';
 import deployedContracts from '../../contracts/deployedContracts';
 import { CHAIN_ID } from '~~/components/constants';
 import { Address } from '~~/components/scaffold-eth';
+import { QRCodeSVG } from 'qrcode.react';
 
 export interface CreatorProps {
     avatar_url: string;
@@ -106,70 +107,109 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
         setIsButtonVisible(false);
     };
 
+
+
+
+
+
+
+
+
+
     return (
-        <div className="flex flex-col space-y-2 px-4 py-4 bg-white rounded-lg shadow-md ">
-            {/* name */}
-            <div className="flex items-center space-x-2">
-                <img src={avatar_url} className="w-12 h-12 rounded-full" />
-            </div>
-            <h2 className="text-xl font-bold text-gray-800">{name}</h2>
-            <p className="text-gray-600">{description}</p>
-            <div className="flex items-center space-x-2">
-                <button
-                    type="button"
-                    onClick={() => setUsdAmount("3")}
-                    className="px-2 py-1 text-sm font-medium text-center text-gray-500 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                    $3 USD
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setUsdAmount("5")}
-                    className="px-2 py-1 text-sm font-medium text-center text-gray-500 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                    $5 USD
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setUsdAmount("10")}
-                    className="px-2 py-1 text-sm font-medium text-center text-gray-500 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                    $10 USD
-                </button>
-                <div className="flex-grow">
-                    <input
-                        type="number"
-                        value={usdAmount}
-                        onChange={(e) => setUsdAmount(e.target.value)}
-                        placeholder="Enter custom amount (USD)"
-                        className="px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+        <div className="flex flex-col justify-center items-center min-h-screen space-y-4">
+            <div className="flex flex-col items-center space-y-4 px-6 py-6 bg-white rounded-lg shadow-md max-w-md w-full">
+                {/* User Info */}
+                <div className="flex justify-center items-center space-x-4">
+                    <div className="avatar">
+                        <div className="w-24 rounded-full h-24 mx-auto">
+                            <img src={avatar_url} alt="Avatar" />
+                        </div>
+                    </div>
                 </div>
+                <div className="flex flex-col items-center">
+                    <h2 className="text-2xl font-bold text-gray-800">{name}</h2>
+                    <p className="text-gray-600">{description}</p>
+                </div>
+
+                {/* Tip Buttons and Input */}
+                <div className="flex items-center space-x-2">
+                    <button
+                        type="button"
+                        onClick={() => setUsdAmount("3")}
+                        className="px-4 py-2 text-sm font-medium text-center text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                        $3 USD
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setUsdAmount("5")}
+                        className="px-4 py-2 text-sm font-medium text-center text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                        $5 USD
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setUsdAmount("10")}
+                        className="px-4 py-2 text-sm font-medium text-center text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                        $10 USD
+                    </button>
+                    <div className="flex-grow">
+                        <input
+                            type="number"
+                            value={usdAmount}
+                            onChange={(e) => setUsdAmount(e.target.value)}
+                            placeholder="Enter custom amount (USD)"
+                            className="w-full px-4 py-2 border rounded-md border-gray-300 bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                </div>
+
+                {/* Equivalent ETH Amount */}
+                <div>
+                    {ethAmount && (
+                        <p className="text-gray-800">Equivalent in ETH: {ethAmount}</p>
+                    )}
+                </div>
+
+                {/* Send Tip Button */}
+                <button
+                    onClick={handleTip}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700"
+                >
+                    Send Tip
+                </button>
+
+
             </div>
-            <div>
-                {ethAmount && (
-                    <p>Equivalent in ETH: {ethAmount}</p>
-                )}
-            </div>
-            <button onClick={handleTip} className="mt-4 px-1 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 max-w-xs">
-                Send Tip
-            </button>
+
+            {/* Send Tip Directly Button */}
             {isButtonVisible && (
                 <button
                     onClick={toggleAddressVisibility}
-                    className="mt-4 px-1 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 max-w-xs"
+                    className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
                 >
-                    Send Tip Directly
+                    ...or send tip directly
                 </button>
             )}
+            {/* Address Component */}
+
             {isAddressVisible && (
-                <div>
-                    <Address address={wallet} />
+                <div className="flex justify-center items-center mt-4 space-x-4">
+                    <div className="flex flex-col items-center">
+                        <Address address={wallet} />
+                    </div>
+                    <div>
+                        <QRCodeSVG value={wallet} size={100} />
+                    </div>
                 </div>
             )}
-        </div>
 
+        </div>
     );
+
 };
+
 
 export default Creator;
