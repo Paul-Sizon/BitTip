@@ -15,6 +15,8 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isValid, setIsValid] = useState(true);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
+
 
   const inputFile = useRef(null);
   const [mode, setMode] = useState("register");  // 'register' or 'update'
@@ -73,44 +75,67 @@ const ProfilePage = () => {
 
   const saveProfile = async () => {
     if (mode === "update") {
-        const confirmation = window.confirm("Are you sure you want to update your profile?");
-        if (!confirmation) {
-            return;
-        }
+      const confirmation = window.confirm("Are you sure you want to update your profile?");
+      if (!confirmation) {
+        return;
+      }
     }
 
     const defaultImage = `https://robohash.org/${address}.png?set=set5`;
     const avatarUrl = cid ? `${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}` : defaultImage;
 
-    try {
-        const profileData = {
-            wallet: address,  // This should be your unique identifier
-            name: profile.name,
-            description: profile.description,
-            avatar_url: profile.image || avatarUrl,
-        };
+    setUsernameError("");
 
-        const { data, error } = await supabase
-            .from('profiles')
-            .upsert(profileData, {
-                onConflict: 'wallet', // Specify the conflict resolution strategy
-            });
-
-            if (error) {
-              console.error('Error saving profile:', error);
-          } else {
-              setShowSuccessAlert(true);
-              setTimeout(() => {
-                  setShowSuccessAlert(false);
-                  router.push(`/${profile.name}`);
-              }, 3000); 
-              
-          }
-    } catch (e) {
-        console.error('Unexpected error:', e);
-        alert('An unexpected error occurred');
+    // Check if username is already taken
+    const { data: existingProfile, error: usernameCheckError } = await supabase
+      .from('profiles')
+      .select('wallet')
+      .ilike('name', profile.name.trim())
+      .not('wallet', 'eq', address)  // Ensure we exclude the current user's wallet
+      .maybeSingle();  // Use maybeSingle() because it resolves to null instead of throwing an error if no row is found
+    if (usernameCheckError && usernameCheckError.message !== "No rows found") {
+      console.error('Error checking username:', usernameCheckError);
+      // setUsernameError('Error checking if username is available.');
+      return;
     }
-};
+
+    if (existingProfile) {
+      setUsernameError('Username already taken. Please choose another username.');
+      return;
+    }
+
+
+    try {
+      const profileData = {
+        wallet: address,  // This should be your unique identifier
+        name: profile.name,
+        description: profile.description,
+        avatar_url: profile.image || avatarUrl,
+      };
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .upsert(profileData, {
+          onConflict: 'wallet', // Specify the conflict resolution strategy
+        });
+
+      if (error) {
+        console.error('Error saving profile:', error);
+
+        alert(`Could not save/update profile: ${error.message}`);
+      } else {
+        setShowSuccessAlert(true);
+        setTimeout(() => {
+          setShowSuccessAlert(false);
+          router.push(`/${profile.name}`);
+        }, 3000);
+
+      }
+    } catch (e) {
+      console.error('Unexpected error:', e);
+      alert('An unexpected error occurred');
+    }
+  };
 
 
 
@@ -161,13 +186,13 @@ const ProfilePage = () => {
 
       {/* Success alert */}
       {showSuccessAlert && (
-            <div role="alert" className="alert alert-success mx-auto w-full max-w-md">
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>{mode === "update" ? "Your profile has been updated successfully!" : "Your profile has been created successfully!"}</span>
-            </div>
-        )}
+        <div role="alert" className="alert alert-success mx-auto w-full max-w-md">
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{mode === "update" ? "Your profile has been updated successfully!" : "Your profile has been created successfully!"}</span>
+        </div>
+      )}
 
       <div className={`flex flex-col items-center space-y-4 px-6 py-6 bg-white rounded-lg shadow-md max-w-md w-full ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
         {address ? (
@@ -210,13 +235,20 @@ const ProfilePage = () => {
                 <span className="label-text-alt text-black">
                   Your URL will be: <strong>bittip.to/{profile.name || 'yourname'}</strong>
                 </span>
-                
+
               </div>
               {!isValid && (
-                  <span className="text-red-500 text-sm mt-1 text-center">
-                    Use only letters, numbers, underscores, or hyphens, up to 24 characters
-                  </span>
-                )}
+                <span className="text-red-500 text-sm mt-1 text-center">
+                  Use only letters, numbers, underscores, or hyphens, up to 24 characters
+                </span>
+              )}
+              {usernameError && (
+    <div className="text-center mt-2">
+        <span className="text-red-500 text-sm">
+            {usernameError}
+        </span>
+    </div>
+)}
             </label>
 
             <label className="form-control w-full max-w-xs">
