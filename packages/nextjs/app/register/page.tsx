@@ -143,14 +143,14 @@ const ProfilePage = () => {
   return (
     <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
       {isLoading && (
-        <div className="absolute inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center">
+       <div className="absolute inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center">
           <span className="loading loading-ring loading-lg"></span>
         </div>
       )}
       <div className={`flex flex-col items-center space-y-4 px-6 py-6 bg-white rounded-lg shadow-md max-w-md w-full ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
         {address ? (
           <>
-            <h2 className="text-2xl font-semibold mb-4">{mode === "update" ? "Update Your Profile" : "Register Your Profile"}</h2>
+            <h2 className="text-2xl text-black font-semibold mb-4">{mode === "update" ? "Update Your Profile" : "Register Your Profile"}</h2>
             <div className="mb-4 flex flex-col items-center justify-center">
               {profile.image && (
                 <div className="avatar mb-2">
@@ -164,7 +164,7 @@ const ProfilePage = () => {
               )}
               <input type="file" id="file" ref={inputFile} onChange={handleChange} style={{ display: 'none' }} />
               <button
-                className={`w-full text-center py-2 px-4 mt-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${uploading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-700'}`}
+                className={`btn text-white ${uploading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-700'}`}
                 disabled={uploading}
                 onClick={() => inputFile.current.click()}
               >
@@ -172,38 +172,53 @@ const ProfilePage = () => {
               </button>
             </div>
 
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Name</label>
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text text-black">What is your name?</span>
+              </div>
               <input
                 type="text"
                 name="name"
                 value={profile.name || ''}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Pavel"
+                className="input input-bordered w-full max-w-xs"
               />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Description</label>
-              <textarea
+              <div className="label">
+                <span className="label-text-alt text-black">
+                  Your URL will be: <strong>bittip.to/{profile.name}</strong>
+                </span>
+              </div>
+            </label>
+
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text text-black">Description:</span>
+              </div>
+              <input
+                type="text"
                 name="description"
                 value={profile.description || ''}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                rows="3"
+                placeholder="Web3 developer 😎"
+                className="input input-bordered w-full max-w-xs"
               />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Wallet Address</label>
-              <input
-                type="text"
-                name="creatorWalletAddress"
-                value={profile.creatorWalletAddress || address || ''}
-                readOnly
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-500 bg-gray-100 sm:text-sm"
-              />
-            </div>
+            </label>
+
+
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text text-black">Wallet address:</span>
+              </div>
+              <input type="text" name="creatorWalletAddress" value={profile.creatorWalletAddress || address || ''} className="input input-bordered w-full  sm:text-sm shadow-sm text-gray-500 " disabled />
+              <div className="label">
+              <span className="label-text-alt text-black">only ETH for now</span>
+                {/* <span className="label-text-alt"> (only ETH for now)</span> */}
+              </div>
+            </label>
+
             <button
-              className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
+              className="btn btn-wide btn-active bg-blue-500 hover:bg-blue-700 text-white font-bold"
               onClick={saveProfile}
             >
               {mode === "update" ? "Update Profile" : "Create Profile"}

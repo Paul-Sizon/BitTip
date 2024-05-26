@@ -50,7 +50,7 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                 method: 'GET',
                 headers: {
                     accept: 'application/json',
-                    'x-cg-pro-api-key': process.env.COINGECKO_API_KEY
+                    'x-cg-api-key': process.env.COINGECKO_API_KEY
                 }
             };
 
