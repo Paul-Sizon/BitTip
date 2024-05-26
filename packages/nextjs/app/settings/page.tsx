@@ -14,6 +14,7 @@ const ProfilePage = () => {
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isValid, setIsValid] = useState(true);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const inputFile = useRef(null);
   const [mode, setMode] = useState("register");  // 'register' or 'update'
@@ -95,13 +96,16 @@ const ProfilePage = () => {
                 onConflict: 'wallet', // Specify the conflict resolution strategy
             });
 
-        if (error) {
-            console.error('Error saving profile:', error);
-            alert(`Could not save/update profile: ${error.message}`);
-        } else {
-            alert('Profile saved/updated successfully!');
-            router.push(`/${profile.name}`);
-        }
+            if (error) {
+              console.error('Error saving profile:', error);
+          } else {
+              setShowSuccessAlert(true);
+              setTimeout(() => {
+                  setShowSuccessAlert(false);
+                  router.push(`/${profile.name}`);
+              }, 3000); 
+              
+          }
     } catch (e) {
         console.error('Unexpected error:', e);
         alert('An unexpected error occurred');
@@ -154,6 +158,17 @@ const ProfilePage = () => {
           <span className="loading loading-ring loading-lg"></span>
         </div>
       )}
+
+      {/* Success alert */}
+      {showSuccessAlert && (
+            <div role="alert" className="alert alert-success mx-auto w-full max-w-md">
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{mode === "update" ? "Your profile has been updated successfully!" : "Your profile has been created successfully!"}</span>
+            </div>
+        )}
+
       <div className={`flex flex-col items-center space-y-4 px-6 py-6 bg-white rounded-lg shadow-md max-w-md w-full ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
         {address ? (
           <>
