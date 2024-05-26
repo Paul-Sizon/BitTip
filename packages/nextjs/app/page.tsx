@@ -12,10 +12,15 @@ const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
   const [username, setUsername] = useState<string | null>(null);
   const router = useRouter();
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
+    setLoading(true);
     const checkRegistration = async () => {
-      if (!connectedAddress) return;
+      if (!connectedAddress) {
+        setLoading(false);
+        return;
+      }
 
       const { data, error } = await supabase
         .from('profiles')
@@ -23,18 +28,17 @@ const Home: NextPage = () => {
         .eq('wallet', connectedAddress)
         .single();
 
-      if (error) {
-        console.error('Error fetching user data:', error);
-        return;
-      }
+        if (error) {
+          console.error('Error fetching user data:', error);
+          setLoading(false);
+          return;
+        }
 
-      if (data && data.name) {
-        setUsername(data.name);
-        // router.push(`/${data.name}`);  // Redirect to profile page by username
-      } else {
-        // router.push('/register');  // Redirect to registration page
-      }
-    };
+        if (data && data.name) {
+          setUsername(data.name);
+        }
+        setLoading(false); // End loading when data is fetched or on error
+      };
 
     checkRegistration();
   }, [connectedAddress, router]);
@@ -54,7 +58,7 @@ const Home: NextPage = () => {
           <div className="flex flex-col items-center">
             <p className="my-2 font-medium">Connected Address:</p>
             <Address address={connectedAddress} />
-            {username ? (
+            {!loading && (username ? (
               <Link href={`/${username}`} className="btn btn-wide font-bold mt-6 bg-blue-500 hover:bg-blue-700 text-white">
                 Go to My Profile
               </Link>
@@ -63,7 +67,7 @@ const Home: NextPage = () => {
                 className="btn btn-success btn-wide font-bold mt-6">
                 Register
               </Link>
-            )}
+             ))}
           </div>
         ) : (
 

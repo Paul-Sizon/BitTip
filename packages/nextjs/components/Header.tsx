@@ -20,7 +20,7 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/",
   },
   {
-    label: "My Profile",
+    label: "My page",
     href: "/profile"
   },
   {

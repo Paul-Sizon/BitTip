@@ -35,7 +35,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "../supabase.ts"
-  ],
+, "app/register/components/ConnectWalletButton.jsx", "app/register/components/ConnectWalletButton.jsx"  ],
   "exclude": [
     "node_modules"
   ]

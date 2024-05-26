@@ -5,7 +5,7 @@ import { useAccount } from 'wagmi'
 
 export default function Login() {
 
-    const account = useAccount().address
+    const account = useAccount().status
 
     return (
         <div>

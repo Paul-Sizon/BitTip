@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { CreatorData, getCreatorData } from './creatorRepository'; // Adjust the import path as necessary
 import Creator from '../bittip/page';
-import { LoaderIcon } from 'react-hot-toast';
 
 const CreatorPage: React.FC = () => {
   const pathname = usePathname();
