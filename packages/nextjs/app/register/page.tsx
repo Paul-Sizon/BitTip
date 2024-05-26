@@ -51,7 +51,7 @@ const ProfilePage = () => {
       });
       const resData = await res.json();
       setCid(resData.IpfsHash);
-      setProfile({ ...profile, image: resData.IpfsHash });
+      setProfile({ ...profile, image: `${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${resData.IpfsHash}` });
       setUploading(false);
     } catch (e) {
       console.error(e);
@@ -79,7 +79,7 @@ const ProfilePage = () => {
         wallet: address,  // This should be your unique identifier
         name: profile.name,
         description: profile.description,
-        avatar_url: avatarUrl
+        avatar_url: profile.image || avatarUrl,
       };
 
       const { data, error } = await supabase
@@ -122,6 +122,7 @@ const ProfilePage = () => {
       alert('Could not load profile data.');
       setIsLoading(false);
     } else if (data) {
+      setCid(data.avatar_url); // Set CID from the existing avatar URL if available
       setProfile({
         name: data.name,
         description: data.description,
@@ -138,9 +139,9 @@ const ProfilePage = () => {
   };
 
 
+
   return (
     <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
-
       {isLoading && (
         <div className="absolute inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center">
           <span className="loading loading-ring loading-lg"></span>
@@ -151,11 +152,11 @@ const ProfilePage = () => {
           <>
             <h2 className="text-2xl font-semibold mb-4">{mode === "update" ? "Update Your Profile" : "Register Your Profile"}</h2>
             <div className="mb-4 flex flex-col items-center justify-center">
-              {cid && (
+              {profile.image && (
                 <div className="avatar mb-2">
                   <div className="w-32 rounded-full h-32 mx-auto">
                     <img
-                      src={`${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`}
+                      src={profile.image}
                       alt="Profile Avatar"
                     />
                   </div>
