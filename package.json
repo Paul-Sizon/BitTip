@@ -40,6 +40,7 @@
     "lint-staged": "^13.0.3"
   },
   "dependencies": {
+    "@chainlink/contracts": "^1.1.1",
     "@supabase/ui": "^0.36.5",
     "@web3-storage/w3up-client": "^13.1.1",
     "buffer": "^6.0.3",
