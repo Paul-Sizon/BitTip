@@ -47,31 +47,30 @@ export const Footer = () => {
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">
-              <a href="https://github.com/scaffold-eth/se-2" target="_blank" rel="noreferrer" className="link">
-                Fork me
+              <a href="https://github.com/Paul-Sizon/BitTip" target="_blank" rel="noreferrer" className="link">
+                Github
               </a>
             </div>
             <span>·</span>
             <div className="flex justify-center items-center gap-2">
               <p className="m-0 text-center">
-                Built with <HeartIcon className="inline-block h-4 w-4" /> at
+                Built with <HeartIcon className="inline-block h-4 w-4" /> by
               </p>
+              <a href="https://batch4.buidlguidl.com/builders/0x2Ca3355E6e09e54bE4A70F44d6709DABA08fC786" target="_blank" rel="noreferrer" className="link">
+                Pablo
+              </a>
+              <span>at</span>
               <a
                 className="flex justify-center items-center gap-1"
                 href="https://buidlguidl.com/"
                 target="_blank"
                 rel="noreferrer"
-              >
+              >   
                 <BuidlGuidlLogo className="w-3 h-5 pb-1" />
                 <span className="link">BuidlGuidl</span>
               </a>
-            </div>
-            <span>·</span>
-            <div className="text-center">
-              <a href="https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA" target="_blank" rel="noreferrer" className="link">
-                Support
-              </a>
-            </div>
+            </div>            
+            
           </div>
         </ul>
       </div>
