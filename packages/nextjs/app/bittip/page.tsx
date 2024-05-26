@@ -92,6 +92,12 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
         }
     };
 
+    const handleUsdAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Regular expression to allow only positive integers
+        const validValue = e.target.value.replace(/[^0-9]/g, '');
+        setUsdAmount(validValue);
+    };
+
 
     useEffect(() => {
         if (usdAmount) {
@@ -155,13 +161,15 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                     >
                         $10 USD
                     </button>
+
+                    {/* Custom amount USD Input */}
                     <div className="flex-grow">
                         <input
                             type="number"
                             value={usdAmount}
-                            onChange={(e) => setUsdAmount(e.target.value)}
+                            onChange={handleUsdAmountChange} // Pass the entire event object
                             placeholder="USD"
-                            className="input input-bordered w-full max-w-xs" 
+                            className="input input-bordered w-full max-w-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"                         
                         />
                     </div>
                 </div>
