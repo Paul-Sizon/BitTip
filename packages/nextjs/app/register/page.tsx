@@ -31,7 +31,7 @@ const ProfilePage = () => {
       loadProfile(address);
       setIsLoading(false);
     } else {
-      setIsLoading(false);      
+      setIsLoading(false);
     }
   }, [address]);
 
@@ -138,86 +138,88 @@ const ProfilePage = () => {
   };
 
 
-  return (    
-      <div className="relative max-w-md mx-auto mt-10">
-        {isLoading && (
-          <div className="absolute inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center">
-            <span className="loading loading-ring loading-lg"></span>
-          </div>
-        )}
-        <div className={`p-4 bg-white shadow-md rounded-md ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
-          {address ? (
-            <>
-              <h2 className="text-2xl font-semibold mb-4">{mode === "update" ? "Update Your Profile" : "Register Your Profile"}</h2>
-              <div className="mb-4">
-                <label htmlFor="file" className="block text-sm font-medium text-gray-700 mb-1">Upload Avatar</label>
-                <input type="file" id="file" ref={inputFile} onChange={handleChange} style={{ display: 'none' }} />
-                <button
-                  className={`w-full text-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${uploading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-700'}`}
-                  disabled={uploading}
-                  onClick={() => inputFile.current.click()}
-                >
-                  {uploading ? "Uploading..." : "Upload Image"}
-                </button>
-                {cid && (
-                  <div className="mt-2 text-center">
+  return (
+    <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
+
+      {isLoading && (
+        <div className="absolute inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center">
+          <span className="loading loading-ring loading-lg"></span>
+        </div>
+      )}
+      <div className={`flex flex-col items-center space-y-4 px-6 py-6 bg-white rounded-lg shadow-md max-w-md w-full ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
+        {address ? (
+          <>
+            <h2 className="text-2xl font-semibold mb-4">{mode === "update" ? "Update Your Profile" : "Register Your Profile"}</h2>
+            <div className="mb-4 flex flex-col items-center justify-center">
+              {cid && (
+                <div className="avatar mb-2">
+                  <div className="w-32 rounded-full h-32 mx-auto">
                     <img
                       src={`${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`}
                       alt="Profile Avatar"
-                      className="mx-auto h-20 w-20 rounded-full"
                     />
                   </div>
-                )}
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={profile.name || ''}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Description</label>
-                <textarea
-                  name="description"
-                  value={profile.description || ''}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  rows="3"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Wallet Address</label>
-                <input
-                  type="text"
-                  name="creatorWalletAddress"
-                  value={profile.creatorWalletAddress || address || ''}
-                  readOnly
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-500 bg-gray-100 sm:text-sm"
-                />
-              </div>
+                </div>
+              )}
+              <input type="file" id="file" ref={inputFile} onChange={handleChange} style={{ display: 'none' }} />
               <button
-                className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
-                onClick={saveProfile}
+                className={`w-full text-center py-2 px-4 mt-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${uploading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-700'}`}
+                disabled={uploading}
+                onClick={() => inputFile.current.click()}
               >
-                {mode === "update" ? "Update Profile" : "Create Profile"}
+                {uploading ? "Uploading..." : "Upload Avatar"}
               </button>
-            </>
-          ) : (
-            <div className="text-center p-4">
-              <h2 className="text-xl font-semibold">Wallet Not Connected</h2>
-              <p className="text-gray-600">Please connect your wallet to access the profile page.</p>
-              <RainbowKitCustomConnectButton />
             </div>
-          )}
-        </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={profile.name || ''}
+                onChange={handleInputChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">Description</label>
+              <textarea
+                name="description"
+                value={profile.description || ''}
+                onChange={handleInputChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                rows="3"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">Wallet Address</label>
+              <input
+                type="text"
+                name="creatorWalletAddress"
+                value={profile.creatorWalletAddress || address || ''}
+                readOnly
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-500 bg-gray-100 sm:text-sm"
+              />
+            </div>
+            <button
+              className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
+              onClick={saveProfile}
+            >
+              {mode === "update" ? "Update Profile" : "Create Profile"}
+            </button>
+          </>
+        ) : (
+          <div className="text-center p-4">
+            <h2 className="text-xl font-semibold">Wallet Not Connected</h2>
+            <p className="text-gray-600">Please connect your wallet to access the profile page.</p>
+            <RainbowKitCustomConnectButton />
+          </div>
+        )}
       </div>
-    );
-  };
-    
+    </div>
+  );
+};
+
 
 
 export default ProfilePage;
