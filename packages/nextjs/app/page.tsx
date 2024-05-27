@@ -12,7 +12,7 @@ const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
   const [username, setUsername] = useState<string | null>(null);
   const router = useRouter();
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -28,17 +28,17 @@ const Home: NextPage = () => {
         .eq('wallet', connectedAddress)
         .single();
 
-        if (error) {
-          console.error('Error fetching user data:', error);
-          setLoading(false);
-          return;
-        }
+      if (error) {
+        console.error('Error fetching user data:', error);
+        setLoading(false);
+        return;
+      }
 
-        if (data && data.name) {
-          setUsername(data.name);
-        }
-        setLoading(false); // End loading when data is fetched or on error
-      };
+      if (data && data.name) {
+        setUsername(data.name);
+      }
+      setLoading(false); // End loading when data is fetched or on error
+    };
 
     checkRegistration();
   }, [connectedAddress, router]);
@@ -67,7 +67,7 @@ const Home: NextPage = () => {
                 className="btn btn-success btn-wide font-bold mt-6">
                 Register
               </Link>
-             ))}
+            ))}
           </div>
         ) : (
 
