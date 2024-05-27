@@ -37,7 +37,7 @@ const Home: NextPage = () => {
       if (data && data.name) {
         setUsername(data.name);
       }
-      setLoading(false); // End loading when data is fetched or on error
+      setLoading(false);
     };
 
     checkRegistration();
@@ -45,11 +45,10 @@ const Home: NextPage = () => {
 
   return (
     <div className="flex items-center flex-col flex-grow pt-10">
-      <div className="px-5">
-        <h1 className="text-center">
-          <span className="block text-2xl mb-2">Welcome to</span>
-          <span className="block text-4xl font-bold">BitTip</span>
-        </h1>
+      <div className="px-5">      
+          <div className="flex justify-center items-center">
+            <img alt="BitTip logo" className="w-72" src="/logo.png" />
+          </div>  
         <div className="flex items-center flex-col flex-grow max-w-xl mx-auto">
           <p className="text-center text-lg ">BitTip is a tipping platform using a smart contract on the Ethereum blockchain, aimed at enabling users to send tips to content creators in a transparent, secure, and efficient manner.</p>
         </div>

@@ -7,6 +7,9 @@ import deployedContracts from '../../contracts/deployedContracts';
 import { CHAIN_ID } from '~~/components/constants';
 import { Address } from '~~/components/scaffold-eth';
 import { QRCodeSVG } from 'qrcode.react';
+import Confetti from 'react-confetti';
+import { useWindowSize } from 'usehooks-ts';
+
 
 export interface CreatorProps {
     avatar_url: string;
@@ -21,10 +24,18 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     const [ethPrice, setEthPrice] = useState(null);
     const [isAddressVisible, setIsAddressVisible] = useState(false);
     const [isButtonVisible, setIsButtonVisible] = useState(true);
+    const [comment, setComment] = useState('');
+
+    
+    const [isLoading, setIsLoading] = useState(false);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
+
+    const { width, height } = useWindowSize()
 
     const walletClient = useWalletClient();
-
     const chainId = CHAIN_ID;
+    
 
     const getContract = async () => {
         if (!walletClient.data) {
@@ -78,17 +89,32 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
         const contract = await getContract();
         if (!contract) return;
 
+        setIsLoading(true);
         try {
-            const tx = await contract.tipCreator(wallet, {
+            const tx = await contract.tipCreator(wallet, comment, {
                 value: ethers.parseEther(ethAmount.toString()), // Ensure ethAmount is a string
                 gasLimit: 210000,
             });
             console.log('Sending tip to $s', wallet);
+            console.log('Comment:', comment);
             console.log(`Transaction sent: ${tx.hash}`);
             const receipt = await tx.wait();
             console.log('Transaction confirmed:', receipt.confirmations);
+
+            setShowSuccessAlert(true);
+            setShowConfetti(true); 
+            setTimeout(() => {
+                setShowSuccessAlert(false);
+                setShowConfetti(false); 
+                setUsdAmount('');
+                setEthAmount('');
+                setComment('');
+            }, 5000);
+
         } catch (error) {
             console.error('Error sending tip:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -114,21 +140,24 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     };
 
 
-
-
-
-
-
-
-
-
     return (
         <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
-             <div className="flex flex-col items-center space-y-4 px-6 py-6 bg-white rounded-lg shadow-md max-w-md w-full">
+            {/* Confetti */}
+            {showConfetti && <Confetti width={width} height={height} />}
+             {/* Success alert */}
+             {showSuccessAlert && (
+                <div role="alert" className="alert alert-success mx-auto w-full max-w-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>${usdAmount} has been sent! Thank you for the support!</span>
+                </div>
+            )}
+            <div className="flex flex-col items-center space-y-4 px-6 py-6 bg-white rounded-lg shadow-md max-w-md w-full">
                 {/* User Info */}
                 <div className="flex justify-center items-center space-x-4">
                     <div className="avatar">
-                        <div className="w-24 rounded-full h-24 mx-auto">
+                        <div className="w-28 rounded-full h-28 mx-auto">
                             <img src={avatar_url} alt="Avatar" />
                         </div>
                     </div>
@@ -169,7 +198,7 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                             value={usdAmount}
                             onChange={handleUsdAmountChange} // Pass the entire event object
                             placeholder="USD"
-                            className="input input-bordered w-full max-w-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"                         
+                            className="input input-bordered w-full max-w-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         />
                     </div>
                 </div>
@@ -181,32 +210,49 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                     )}
                 </div>
 
+                {/* Comment input */}
+                <div>
+                    <input type="text" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Say something nice" className="input input-bordered w-full max-w-xs" />
+                </div>
+
                 {/* Send Tip Button */}
                 <button
                     onClick={handleTip}
-                    className="btn btn-success"
+                    className="btn btn-success  disabled:text-gray-400 disabled:cursor-not-allowed disabled:bg-gray-200"
+                    disabled={isLoading}
                 >
                     Send Tip
                 </button>
 
+            </div>           
 
-            </div>
+            {/* Progress bar */}
+            {isLoading && (
+                    <progress className="progress w-56"></progress>
+                )}
 
             {/* Send Tip Directly Button */}
             {isButtonVisible && (
-                <div className="flex flex-col items-center space-y-4 pt-16">              
-                <button
-                    onClick={toggleAddressVisibility}
-                    className="btn btn-ghost"
-                >
-                    or send tip directly
-                </button>
+                <div className="flex flex-col items-center  pt-4">
+                    <p className="text-gray-500 text-xs text-center">
+                        The transaction includes 1% platform fee and doesn't include the gas fee
+                    </p>
+                    <button
+                        onClick={toggleAddressVisibility}
+                        className="btn btn-ghost"
+                        style={{ opacity: 0.7 }}
+                    >
+                        show tip address
+                    </button>
                 </div>
             )}
             {/* Address Component */}
 
             {isAddressVisible && (
                 <div className="flex justify-center items-center mt-4 pt-16 space-x-4">
+                    <div className="flex flex-col items-center">
+                        <p>ETH</p>
+                    </div>
                     <div className="flex flex-col items-center">
                         <Address address={wallet} />
                     </div>

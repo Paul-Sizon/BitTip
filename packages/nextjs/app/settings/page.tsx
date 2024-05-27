@@ -19,7 +19,7 @@ const ProfilePage = () => {
 
 
   const inputFile = useRef(null);
-  const [mode, setMode] = useState("register");  // 'register' or 'update'
+  const [mode, setMode] = useState("register"); 
 
 
   const { address } = useAccount();
@@ -31,6 +31,7 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
+    
     if (address) {
       loadProfile(address);
       setIsLoading(false);
@@ -41,12 +42,17 @@ const ProfilePage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const sanitizedValue = value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 24);
+    let sanitizedValue;
+
+    if (name === 'name') {
+        sanitizedValue = value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 24);
+    } else if (name === 'description') {
+        sanitizedValue = value.slice(0, 150); // Assuming a max length of 150 for the description
+    }
 
     setProfile({ ...profile, [name]: sanitizedValue });
-
     setIsValid(value === sanitizedValue);
-  };
+};
 
   const uploadFile = async (fileToUpload) => {
     try {
@@ -175,6 +181,9 @@ const ProfilePage = () => {
   };
 
 
+  const url = process.env.VERCEL_URL
+  ? `${process.env.VERCEL_URL}`
+  : `bittip.to`;
 
   return (
     <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
@@ -233,7 +242,7 @@ const ProfilePage = () => {
               />
               <div className="label">
                 <span className="label-text-alt text-black">
-                  Your URL will be: <strong>bittip.to/{profile.name || 'yourname'}</strong>
+                  Your URL will be: <strong>{url}/{profile.name || 'yourname'}</strong>
                 </span>
 
               </div>

@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import logo from '../components/assets/bittip_main.png';
 
 type HeaderMenuLink = {
   label: string;
@@ -14,11 +15,7 @@ type HeaderMenuLink = {
   icon?: React.ReactNode;
 };
 
-export const menuLinks: HeaderMenuLink[] = [
-  {
-    label: "Home",
-    href: "/",
-  },
+export const menuLinks: HeaderMenuLink[] = [  
   {
     label: "My page",
     href: "/profile"
@@ -96,8 +93,8 @@ export const Header = () => {
           )}
         </div>
         <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
-          <div className="flex relative w-10 h-10">
-            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
+          <div className="flex relative w-10 h-14">
+            <Image alt="BitTip logo" className="cursor-pointer" fill src="/logo.png" />
           </div>
           <div className="flex flex-col">
             <span className="font-bold leading-tight">BitTip</span>

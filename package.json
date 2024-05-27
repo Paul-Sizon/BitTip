@@ -47,6 +47,7 @@
     "buffer": "^6.0.3",
     "ipfs-http-client": "^60.0.1",
     "ipfs-utils": "^9.0.14",
-    "next-connect": "next"
+    "next-connect": "next",
+    "react-confetti": "^6.1.0"
   }
 }
