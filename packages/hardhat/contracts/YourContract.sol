@@ -13,6 +13,8 @@ contract YourContract {
 	address payable public platformOwner;
 	uint8 public platformFeePercentage;
 
+	event TipSent(address indexed sender, address indexed creator, uint256 amount, string comment);
+
 	modifier onlyPlatformOwner() {
 		require(
 			msg.sender == platformOwner,
@@ -46,20 +48,23 @@ contract YourContract {
 	}
 
 	function tipCreator(
-		address payable _creatorWallet
-	) external payable noReentrancy {
-		require(msg.value > 0, "Tip amount must be greater than 0.");
-		require(
-			_creatorWallet != address(0),
-			"Invalid creator wallet address."
-		);
+        address payable _creatorWallet,
+        string calldata comment
+    ) external payable noReentrancy {
+        require(msg.value > 0, "Tip amount must be greater than 0.");
+        require(
+            _creatorWallet != address(0),
+            "Invalid creator wallet address."
+        );
 
-		uint256 platformFee = (msg.value * platformFeePercentage) / 100;
-		uint256 tipAmount = msg.value - platformFee;
+        uint256 platformFee = (msg.value * platformFeePercentage) / 100;
+        uint256 tipAmount = msg.value - platformFee;
 
-		platformOwner.transfer(platformFee); // Transfer the platform fee
-		_creatorWallet.transfer(tipAmount); // Transfer tip to the creator
-	}
+        platformOwner.transfer(platformFee); 
+        _creatorWallet.transfer(tipAmount); 
+
+        emit TipSent(msg.sender, _creatorWallet, tipAmount, comment);
+    }
 
 	function withdrawAll() external onlyPlatformOwner noReentrancy {
 		uint256 contractBalance = address(this).balance;

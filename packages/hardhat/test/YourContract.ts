@@ -52,10 +52,10 @@ describe("YourContract", function () {
       const initialCreatorBalance = await ethers.provider.getBalance(addr1.address);
       const initialTipperBalance = await ethers.provider.getBalance(addr2.address);
 
-      const tx = await yourContract.connect(addr2).tipCreator(addr1.address, { value: tipAmount });
+      const tx = await yourContract.connect(addr2).tipCreator(addr1.address, "", { value: tipAmount });
       const receipt = await tx.wait();
-      const gasUsed = receipt.gasUsed;
-      const gasPrice = tx.gasPrice || receipt.gasPrice;
+      const gasUsed = receipt!.gasUsed;
+      const gasPrice = tx.gasPrice || receipt!.gasPrice;
       const gasCost = gasUsed * (gasPrice);
 
       const finalOwnerBalance = await ethers.provider.getBalance(owner.address);
@@ -96,14 +96,14 @@ describe("YourContract", function () {
     });
 
     it("Should revert if tip amount is zero", async function () {
-      await expect(yourContract.tipCreator(addr1.address, { value: 0 })).to.be.revertedWith(
+      await expect(yourContract.tipCreator(addr1.address, "comment", { value: 0 })).to.be.revertedWith(
         "Tip amount must be greater than 0."
       );
     });
 
     it("Should revert if creator wallet address is invalid", async function () {
       await expect(
-        yourContract.tipCreator(ethers.ZeroAddress, { value: ethers.parseEther("1.0") })
+        yourContract.tipCreator(ethers.ZeroAddress, "", { value: ethers.parseEther("1.0") })
       ).to.be.revertedWith("Invalid creator wallet address.");
     });
   });

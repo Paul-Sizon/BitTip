@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     YourContract: {
-      address: "0x5370F78c6af2Da9cF6642382A3a75F9D5aEc9cc1",
+      address: "0x34ee84036C47d852901b7069aBD80171D9A489a6",
       abi: [
         {
           inputs: [
@@ -19,6 +19,37 @@ const deployedContracts = {
           ],
           stateMutability: "nonpayable",
           type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "creator",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "comment",
+              type: "string",
+            },
+          ],
+          name: "TipSent",
+          type: "event",
         },
         {
           inputs: [],
@@ -66,6 +97,11 @@ const deployedContracts = {
               name: "_creatorWallet",
               type: "address",
             },
+            {
+              internalType: "string",
+              name: "comment",
+              type: "string",
+            },
           ],
           name: "tipCreator",
           outputs: [],
@@ -78,6 +114,10 @@ const deployedContracts = {
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
+        },
+        {
+          stateMutability: "payable",
+          type: "receive",
         },
       ],
       inheritedFunctions: {},
