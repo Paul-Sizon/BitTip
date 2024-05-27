@@ -67,4 +67,6 @@ contract YourContract {
 
 		platformOwner.transfer(contractBalance);
 	}
+
+	receive() external payable {}
 }
