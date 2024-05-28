@@ -5,12 +5,15 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
-import { Address, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { supabase } from '~~/utils/supabase/client';
+import { FiCopy } from 'react-icons/fi';
+
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
   const [username, setUsername] = useState<string | null>(null);
+  const [profileUrl, setProfileUrl] = useState<string>('');
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -36,6 +39,7 @@ const Home: NextPage = () => {
 
       if (data && data.name) {
         setUsername(data.name);
+        setProfileUrl(`${window.location.origin}/${data.name}`);
       }
       setLoading(false);
     };
@@ -43,24 +47,37 @@ const Home: NextPage = () => {
     checkRegistration();
   }, [connectedAddress, router]);
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(profileUrl);
+  };
+
   return (
     <div className="flex items-center flex-col flex-grow pt-10">
-      <div className="px-5">      
-          <div className="flex justify-center items-center">
-            <img alt="BitTip logo" className="w-72" src="/logo.png" />
-          </div>  
+      <div className="px-5">
+        <div className="flex justify-center items-center">
+          <img alt="BitTip logo" className="w-64" src="/logo.png" />
+        </div>
         <div className="flex items-center flex-col flex-grow max-w-xl mx-auto">
-          <p className="text-center text-lg ">BitTip is a tipping platform using a smart contract on the Ethereum blockchain, aimed at enabling users to send tips to content creators in a transparent, secure, and efficient manner.</p>
+          <p className="text-center text-lg ">BitTip is a platform for sending tips to content creators using Ethereum smart contracts, ensuring transparency, security, and efficiency.</p>
         </div>
 
         {connectedAddress ? (
-          <div className="flex flex-col items-center">
-            <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
-            {!loading && (username ? (
-              <Link href={`/${username}`} className="btn btn-wide font-bold mt-6 bg-blue-500 hover:bg-blue-700 text-white">
-                Go to My Profile
-              </Link>
+          <div className="flex flex-col items-center">    
+            {!loading && (username ? (              
+              <div className="flex flex-col items-center justify-center space-y-4 mt-2">
+                <div className="flex items-center space-x-2">
+                  <span className="label-text-alt text-lg">
+                    <strong className="text-lg">{profileUrl}</strong>
+                  </span>
+                  <button onClick={handleCopy} className="btn btn-ghost text-lg">
+                    <FiCopy />
+                  </button>
+                </div>
+                <Link href={`/${username}`} className="btn btn-wide font-bold mt-6 bg-blue-500 hover:bg-blue-700 text-white text-lg">
+                  Go to My Profile
+                </Link>
+              </div>
+
             ) : (
               <Link href="/settings"
                 className="btn btn-success btn-wide font-bold mt-6">

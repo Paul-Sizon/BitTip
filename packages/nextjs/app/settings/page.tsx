@@ -75,8 +75,13 @@ const ProfilePage = () => {
   };
 
   const handleChange = (e) => {
-    setFile(e.target.files[0]);
-    uploadFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile && selectedFile.type.startsWith('image/')) {
+      setFile(selectedFile);
+      uploadFile(selectedFile);
+    } else {
+      alert("Please upload a valid image file.");
+    }
   };
 
   const saveProfile = async () => {

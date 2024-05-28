@@ -48,6 +48,7 @@
     "ipfs-http-client": "^60.0.1",
     "ipfs-utils": "^9.0.14",
     "next-connect": "next",
-    "react-confetti": "^6.1.0"
+    "react-confetti": "^6.1.0",
+    "react-icons": "^5.2.1"
   }
 }
