@@ -45,11 +45,11 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
 
         const provider = new ethers.BrowserProvider(walletClient.data);
         const signer = await provider.getSigner();
-        const abi = deployedContracts[chainId]?.YourContract?.abi;
-        const contractAddress = deployedContracts[chainId]?.YourContract?.address;
+        const abi = deployedContracts[chainId]?.BitTipContract?.abi;
+        const contractAddress = deployedContracts[chainId]?.BitTipContract?.address;
 
         if (!abi) {
-            console.error('ABI not found for YourContract on chain', chainId);
+            console.error('ABI not found for BitTipContract on chain', chainId);
             return null;
         }
 

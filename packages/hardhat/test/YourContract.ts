@@ -1,44 +1,44 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { YourContract } from "../typechain-types";
+import { BitTipContract } from "../typechain-types";
 
-describe("YourContract", function () {
-  let yourContract: YourContract;
+describe("BitTipContract", function () {
+  let bittipContract: BitTipContract;
   let owner: any;
   let addr1: any;
   let addr2: any;
 
   before(async () => {
     [owner, addr1, addr2] = await ethers.getSigners();
-    const yourContractFactory = await ethers.getContractFactory("YourContract");
-    yourContract = (await yourContractFactory.deploy(2)) as YourContract;
-    await yourContract.waitForDeployment();
+    const bittipContractFactory = await ethers.getContractFactory("BitTipContract");
+    bittipContract = (await bittipContractFactory.deploy(2)) as BitTipContract;
+    await bittipContract.waitForDeployment();
   });
 
   describe("Deployment", function () {
     it("Should set the right owner", async function () {
-      expect(await yourContract.platformOwner()).to.equal(owner.address);
+      expect(await bittipContract.platformOwner()).to.equal(owner.address);
     });
 
     it("Should set the right initial fee percentage", async function () {
-      expect(await yourContract.platformFeePercentage()).to.equal(2);
+      expect(await bittipContract.platformFeePercentage()).to.equal(2);
     });
   });
 
   describe("Fee Percentage", function () {
     it("Should allow the owner to change the fee percentage", async function () {
-      await yourContract.setPlatformFeePercentage(5);
-      expect(await yourContract.platformFeePercentage()).to.equal(5);
+      await bittipContract.setPlatformFeePercentage(5);
+      expect(await bittipContract.platformFeePercentage()).to.equal(5);
     });
 
     it("Should not allow non-owner to change the fee percentage", async function () {
-      await expect(yourContract.connect(addr1).setPlatformFeePercentage(5)).to.be.revertedWith(
+      await expect(bittipContract.connect(addr1).setPlatformFeePercentage(5)).to.be.revertedWith(
         "Only the platform owner can perform this action."
       );
     });
 
     it("Should not allow setting fee percentage above 100", async function () {
-      await expect(yourContract.setPlatformFeePercentage(101)).to.be.revertedWith(
+      await expect(bittipContract.setPlatformFeePercentage(101)).to.be.revertedWith(
         "Fee percentage cannot exceed 100."
       );
     });
@@ -52,7 +52,7 @@ describe("YourContract", function () {
       const initialCreatorBalance = await ethers.provider.getBalance(addr1.address);
       const initialTipperBalance = await ethers.provider.getBalance(addr2.address);
 
-      const tx = await yourContract.connect(addr2).tipCreator(addr1.address, "", { value: tipAmount });
+      const tx = await bittipContract.connect(addr2).tipCreator(addr1.address, "", { value: tipAmount });
       const receipt = await tx.wait();
       const gasUsed = receipt!.gasUsed;
       const gasPrice = tx.gasPrice || receipt!.gasPrice;
@@ -62,7 +62,7 @@ describe("YourContract", function () {
       const finalCreatorBalance = await ethers.provider.getBalance(addr1.address);
       const finalTipperBalance = await ethers.provider.getBalance(addr2.address);
 
-      const platformFeePercentage = BigInt(await yourContract.platformFeePercentage());
+      const platformFeePercentage = BigInt(await bittipContract.platformFeePercentage());
       const platformFee = (BigInt(tipAmount) * platformFeePercentage) / BigInt(100);
       const tipTransferAmount = BigInt(tipAmount) - platformFee;
 
@@ -96,14 +96,14 @@ describe("YourContract", function () {
     });
 
     it("Should revert if tip amount is zero", async function () {
-      await expect(yourContract.tipCreator(addr1.address, "comment", { value: 0 })).to.be.revertedWith(
+      await expect(bittipContract.tipCreator(addr1.address, "comment", { value: 0 })).to.be.revertedWith(
         "Tip amount must be greater than 0."
       );
     });
 
     it("Should revert if creator wallet address is invalid", async function () {
       await expect(
-        yourContract.tipCreator(ethers.ZeroAddress, "", { value: ethers.parseEther("1.0") })
+        bittipContract.tipCreator(ethers.ZeroAddress, "", { value: ethers.parseEther("1.0") })
       ).to.be.revertedWith("Invalid creator wallet address.");
     });
   });
@@ -113,14 +113,14 @@ describe("YourContract", function () {
       const depositAmount = ethers.parseEther("2.0");
 
       await owner.sendTransaction({
-        to: await yourContract.getAddress(),
+        to: await bittipContract.getAddress(),
         value: depositAmount,
       });
 
       const initialOwnerBalance = await ethers.provider.getBalance(owner.address);
-      const contractBalance = await ethers.provider.getBalance(await yourContract.getAddress());
+      const contractBalance = await ethers.provider.getBalance(await bittipContract.getAddress());
 
-      const tx = await yourContract.withdrawAll();
+      const tx = await bittipContract.withdrawAll();
       const receipt = await tx.wait();
       const gasUsed = receipt!.gasUsed * receipt!.gasPrice;
 
@@ -131,13 +131,13 @@ describe("YourContract", function () {
     });
 
     it("Should revert if non-owner tries to withdraw", async function () {
-      await expect(yourContract.connect(addr1).withdrawAll()).to.be.revertedWith(
+      await expect(bittipContract.connect(addr1).withdrawAll()).to.be.revertedWith(
         "Only the platform owner can perform this action."
       );
     });
 
     it("Should revert if contract balance is zero", async function () {
-      await expect(yourContract.withdrawAll()).to.be.revertedWith("Contract balance is zero.");
+      await expect(bittipContract.withdrawAll()).to.be.revertedWith("Contract balance is zero.");
     });
   });
 });

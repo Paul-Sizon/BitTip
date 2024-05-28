@@ -81,6 +81,9 @@ module.exports = {
       animation: {
         "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
+      colors: {
+        "btn-success-disabled-text": "#000000",
+      },
     },
   },
 };

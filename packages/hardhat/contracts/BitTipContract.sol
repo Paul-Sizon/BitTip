@@ -9,7 +9,7 @@ import "hardhat/console.sol";
  * It also allows the owner to withdraw the Ether in the contract
  * @author BuidlGuidl
  */
-contract YourContract {
+contract BitTipContract {
 	address payable public platformOwner;
 	uint8 public platformFeePercentage;
 
