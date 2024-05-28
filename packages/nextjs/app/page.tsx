@@ -7,13 +7,14 @@ import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { supabase } from '~~/utils/supabase/client';
-import { FiCopy } from 'react-icons/fi';
+import { FiCopy, FiCheck } from 'react-icons/fi';
 
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
   const [username, setUsername] = useState<string | null>(null);
   const [profileUrl, setProfileUrl] = useState<string>('');
+  const [copied, setCopied] = useState<boolean>(false);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -39,7 +40,7 @@ const Home: NextPage = () => {
 
       if (data && data.name) {
         setUsername(data.name);
-        setProfileUrl(`${window.location.origin}/${data.name}`);
+        setProfileUrl(`https://bittip.id/${data.name}`);
       }
       setLoading(false);
     };
@@ -48,7 +49,10 @@ const Home: NextPage = () => {
   }, [connectedAddress, router]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(profileUrl);
+    navigator.clipboard.writeText(profileUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 600);
+    });
   };
 
   return (
@@ -62,15 +66,15 @@ const Home: NextPage = () => {
         </div>
 
         {connectedAddress ? (
-          <div className="flex flex-col items-center">    
-            {!loading && (username ? (              
+          <div className="flex flex-col items-center">
+            {!loading && (username ? (
               <div className="flex flex-col items-center justify-center space-y-4 mt-2">
                 <div className="flex items-center space-x-2">
                   <span className="label-text-alt text-lg">
                     <strong className="text-lg">{profileUrl}</strong>
                   </span>
                   <button onClick={handleCopy} className="btn btn-ghost text-lg">
-                    <FiCopy />
+                    {copied ? <FiCheck /> : <FiCopy />}
                   </button>
                 </div>
                 <Link href={`/${username}`} className="btn btn-wide font-bold mt-6 bg-blue-500 hover:bg-blue-700 text-white text-lg">

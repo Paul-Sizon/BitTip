@@ -188,7 +188,7 @@ const ProfilePage = () => {
 
   const url = process.env.VERCEL_URL
   ? `${process.env.VERCEL_URL}`
-  : `bittip.to`;
+  : `bittip.id`;
 
   return (
     <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
