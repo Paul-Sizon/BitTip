@@ -57,25 +57,18 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     };
     useEffect(() => {
         const fetchEthPrice = async () => {
-            const options = {
-                method: 'GET',
-                headers: {
-                    accept: 'application/json',
-                    'x-cg-api-key': process.env.COINGECKO_API_KEY
-                }
-            };
-
             try {
-                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd', options);
+                const response = await fetch('/api/ethprice');
                 const data = await response.json();
                 setEthPrice(data.ethereum.usd);
             } catch (err) {
                 console.error('Error fetching ETH price:', err);
             }
         };
-
+    
         fetchEthPrice();
     }, []);
+
 
 
     const convertUsdToEth = (usdAmount) => {
