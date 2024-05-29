@@ -11,8 +11,7 @@ const ProfileRedirect = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const checkRegistration = async () => {
-      // if (!connectedAddress) return;
+    const checkRegistration = async () => {  
 
       const { data, error } = await supabase
         .from('profiles')
@@ -22,9 +21,9 @@ const ProfileRedirect = () => {
 
       if (data && data.name) {
         setUsername(data.name);
-        router.push(`/${data.name}`);  // Redirect to profile page by username
+        router.push(`/${data.name}`); 
       } else {
-        router.push('/settings');  // Redirect to registration page
+        router.push('/settings'); 
       }
     };
 

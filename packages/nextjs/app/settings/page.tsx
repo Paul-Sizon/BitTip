@@ -103,11 +103,10 @@ const ProfilePage = () => {
       .from('profiles')
       .select('wallet')
       .ilike('name', profile.name.trim())
-      .not('wallet', 'eq', address)  // Ensure we exclude the current user's wallet
+      .not('wallet', 'eq', address)  
       .maybeSingle();  // Use maybeSingle() because it resolves to null instead of throwing an error if no row is found
     if (usernameCheckError && usernameCheckError.message !== "No rows found") {
-      console.error('Error checking username:', usernameCheckError);
-      // setUsernameError('Error checking if username is available.');
+      console.error('Error checking username:', usernameCheckError);     
       return;
     }
 
@@ -119,7 +118,7 @@ const ProfilePage = () => {
 
     try {
       const profileData = {
-        wallet: address,  // This should be your unique identifier
+        wallet: address,  // unique identifier
         name: profile.name,
         description: profile.description,
         avatar_url: profile.image || avatarUrl,
@@ -128,7 +127,7 @@ const ProfilePage = () => {
       const { data, error } = await supabase
         .from('profiles')
         .upsert(profileData, {
-          onConflict: 'wallet', // Specify the conflict resolution strategy
+          onConflict: 'wallet',
         });
 
       if (error) {
@@ -169,7 +168,7 @@ const ProfilePage = () => {
       console.error('Error loading profile:', error);
       setIsLoading(false);
     } else if (data) {
-      setCid(data.avatar_url); // Set CID from the existing avatar URL if available
+      setCid(data.avatar_url);
       setProfile({
         name: data.name,
         description: data.description,

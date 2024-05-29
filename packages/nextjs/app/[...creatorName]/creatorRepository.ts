@@ -10,11 +10,10 @@ export interface CreatorData {
 
 export const getCreatorData = async (creatorName: string): Promise<CreatorData | null> => {
   const { data, error } = await supabase
-    .from('profiles') // Assume your table is named 'creators'
+    .from('profiles')
     .select('*')
-    .ilike('name', creatorName) // Assuming you want case-insensitive matching
-    .single(); // Use .single() if you expect only one record or know 'name' is unique
-
+    .ilike('name', creatorName)
+    .single(); 
   if (error) {
     console.error('Error fetching creator data:', error);
     return null;
