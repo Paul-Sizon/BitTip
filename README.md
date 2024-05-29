@@ -35,7 +35,9 @@
 - Add localization
 - Add NFT marketplace?
 
-[<img src="https://github.com/Paul-Sizon/BitTip/blob/main/packages/nextjs/public/logo_integration.png" width="100">](https://bittip.id/Pavel)
+##
+
+[<img src="https://github.com/Paul-Sizon/BitTip/blob/main/packages/nextjs/public/logo_integration.png" width="200">](https://bittip.id/Pavel)
 
 ##  Based on Scaffold-ETH 2
 <a href="https://docs.scaffoldeth.io">Documentation</a> |
