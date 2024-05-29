@@ -1,6 +1,7 @@
 #  BitTip
 
 <a href="https://www.bittip.id/">Link</a>
+
 <img src="https://github.com/Paul-Sizon/BitTip/blob/main/packages/nextjs/public/thumbnail.jpeg" width="200">
 
 **☕️ Crypto tipping platform for sending supporting content creators using Ethereum smart contracts, ensuring transparency, security, and efficiency**
