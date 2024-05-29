@@ -38,7 +38,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
 
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
   const { resolvedTheme } = useTheme();
-  const isDarkMode = resolvedTheme === "dark";
+  const isDarkMode = resolvedTheme === "light";
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
       <RainbowKitProvider
         chains={appChains.chains}
         avatar={BlockieAvatar}
-        theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
+        theme={mounted ? (isDarkMode ? lightTheme() : darkTheme()) : lightTheme()}
       >
         <ScaffoldEthApp>{children}</ScaffoldEthApp>
       </RainbowKitProvider>

@@ -7,8 +7,6 @@ import { usePathname } from "next/navigation";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
-import logo from '../components/assets/bittip_main.png';
-import { useAccount } from "wagmi";
 
 type HeaderMenuLink = {
   label: string;
@@ -34,7 +32,6 @@ export const menuLinks: HeaderMenuLink[] = [
 
 export const HeaderMenuLinks = () => {
   const pathname = usePathname();
-  const { address: connectedAddress } = useAccount();
 
   return (
     <>
