@@ -12,7 +12,7 @@ const ProfileRedirect = () => {
 
   useEffect(() => {
     const checkRegistration = async () => {
-      if (!connectedAddress) return;
+      // if (!connectedAddress) return;
 
       const { data, error } = await supabase
         .from('profiles')

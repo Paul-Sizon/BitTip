@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { CreatorData, getCreatorData } from './creatorRepository'; // Adjust the import path as necessary
-import Creator from '../bittip/page';
+import Creator from '../../components/Creator';
 
 const CreatorPage: React.FC = () => {
   const pathname = usePathname();
-  const creatorName = pathname.split('/').pop();
+  const creatorName = pathname ? pathname.split('/').pop() : null;
   const [creatorInfo, setCreatorInfo] = useState<CreatorData | null>(null);
 
   useEffect(() => {

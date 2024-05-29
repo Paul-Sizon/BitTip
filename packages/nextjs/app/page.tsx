@@ -92,7 +92,7 @@ const Home: NextPage = () => {
         ) : (
 
           <div className="flex flex-col items-center">
-            <p className="text-center" >Please connect your wallet to access features.</p>
+            <p className="text-center" >Connect wallet to set up account and receive tips</p>
             <RainbowKitCustomConnectButton />
           </div>
         )}

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { useWalletClient } from 'wagmi';
-import deployedContracts from '../../contracts/deployedContracts';
+import deployedContracts from '../contracts/deployedContracts';
 import { CHAIN_ID } from '~~/components/constants';
 import { Address } from '~~/components/scaffold-eth';
 import { QRCodeSVG } from 'qrcode.react';
@@ -71,7 +71,7 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
 
 
 
-    const convertUsdToEth = (usdAmount) => {
+    const convertUsdToEth = (usdAmount: number): string | null => {
         if (ethPrice) {
             return (usdAmount / ethPrice).toFixed(18); // 18 decimals for ETH
         }
@@ -120,8 +120,10 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
 
     useEffect(() => {
         if (usdAmount) {
-            const eth = convertUsdToEth(usdAmount);
-            setEthAmount(eth);
+            const eth = convertUsdToEth(Number(usdAmount));
+            if (eth) {
+                setEthAmount(eth);
+            }
         } else {
             setEthAmount('');
         }
@@ -228,7 +230,7 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
             {isButtonVisible && (
                 <div className="flex flex-col items-center  pt-4">
                     <p className="text-gray-500 text-xs text-center">
-                        The transaction includes 1% platform fee and doesn't include the gas fee
+                        The transaction includes 1% platform fee and doesn&apos;t include the gas fee
                     </p>
                     <button
                         onClick={toggleAddressVisibility}

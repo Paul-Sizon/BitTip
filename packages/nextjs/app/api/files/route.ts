@@ -1,5 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
-
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,9 +19,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ IpfsHash }, { status: 200 });
   } catch (e) {
     console.log(e);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

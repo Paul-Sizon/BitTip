@@ -4,10 +4,8 @@ import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithPro
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : `http://localhost:${process.env.PORT || 3000}`;
-const imageUrl = `${baseUrl}/thumbnail.jpg`;
+const baseUrl = `https://BitTip.id`;
+const imageUrl = `${baseUrl}/thumbnail.jpeg`;
 
 const title = "BitTip";
 const titleTemplate = "%s | BitTip";
@@ -31,6 +29,8 @@ export const metadata: Metadata = {
         url: imageUrl,
       },
     ],
+    siteName: "BitTip",
+    url: baseUrl,
   },
   twitter: {
     card: "summary_large_image",

@@ -9,7 +9,7 @@ import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 
 const ProfilePage = () => {
   const router = useRouter();
-  const [file, setFile] = useState("");
+  const [file, setFile] = useState<File | null>(null);
   const [cid, setCid] = useState("");
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +18,7 @@ const ProfilePage = () => {
   const [usernameError, setUsernameError] = useState("");
 
 
-  const inputFile = useRef(null);
+  const inputFile = useRef<HTMLInputElement>(null);
   const [mode, setMode] = useState("register"); 
 
 
@@ -40,21 +40,21 @@ const ProfilePage = () => {
     }
   }, [address]);
 
-  const handleInputChange = (e) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    let sanitizedValue;
+    let sanitizedValue = "";
 
     if (name === 'name') {
-        sanitizedValue = value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 24);
+      sanitizedValue = value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 24);
     } else if (name === 'description') {
-        sanitizedValue = value.slice(0, 150); // Assuming a max length of 150 for the description
+      sanitizedValue = value.slice(0, 150);
     }
 
     setProfile({ ...profile, [name]: sanitizedValue });
     setIsValid(value === sanitizedValue);
-};
+  };
 
-  const uploadFile = async (fileToUpload) => {
+  const uploadFile = async (fileToUpload: File) => {
     try {
       setUploading(true);
       const data = new FormData();
@@ -74,8 +74,9 @@ const ProfilePage = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const selectedFile = e.target.files[0];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
     if (selectedFile && selectedFile.type.startsWith('image/')) {
       setFile(selectedFile);
       uploadFile(selectedFile);
@@ -143,14 +144,13 @@ const ProfilePage = () => {
 
       }
     } catch (e) {
-      console.error('Unexpected error:', e);
-      alert('An unexpected error occurred');
+      console.error("Unexpected error:", e);
+      alert("An unexpected error occurred");
     }
   };
 
 
-
-  const loadProfile = async (walletAddress) => {
+  const loadProfile = async (walletAddress: string): Promise<void> => {
     setIsLoading(true);
 
     if (!walletAddress) {
@@ -186,9 +186,7 @@ const ProfilePage = () => {
   };
 
 
-  const url = process.env.VERCEL_URL
-  ? `${process.env.VERCEL_URL}`
-  : `bittip.id`;
+  const url = "https://bittip.id"
 
   return (
     <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
@@ -227,7 +225,7 @@ const ProfilePage = () => {
               <button
                 className={`btn text-white ${uploading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-700'}`}
                 disabled={uploading}
-                onClick={() => inputFile.current.click()}
+                onClick={() => inputFile.current && inputFile.current.click()}
               >
                 {uploading ? "Uploading..." : "Upload Avatar"}
               </button>
@@ -299,7 +297,7 @@ const ProfilePage = () => {
           </>
         ) : (
           <div className="text-center p-4">
-            <h2 className="text-xl font-semibold">Wallet Not Connected</h2>
+            <h2 className="text-xl font-semibold text-black">Wallet Not Connected</h2>
             <p className="text-gray-600">Please connect your wallet to access the profile page.</p>
             <RainbowKitCustomConnectButton />
           </div>
