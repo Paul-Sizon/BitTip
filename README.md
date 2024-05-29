@@ -32,6 +32,7 @@
 - Add other cryptocurrencies
 - Add traditional login / passkey
 - Add Chainlink oracle for USD/ETH price
+- Add localization
 - Add NFT marketplace?
 
 ##  Based on Scaffold-ETH 2
