@@ -112,10 +112,17 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     };
 
     const handleUsdAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // Regular expression to allow only positive integers
-        const validValue = e.target.value.replace(/[^0-9]/g, '');
-        setUsdAmount(validValue);
+        // Regular expression to allow only digits and one decimal point
+        const validValue = e.target.value.replace(/[^0-9.]/g, '');
+    
+        // Ensure there's only one decimal point
+        const validDecimalValue = validValue.includes('.') 
+            ? validValue.split('.').reduce((acc, part, index) => index === 0 ? part : acc + '.' + part)
+            : validValue;
+    
+        setUsdAmount(validDecimalValue);
     };
+    
 
 
     useEffect(() => {

@@ -1,3 +1,2 @@
-export const CONTRACT_ADDRESS = '0x8464135c8F25Da09e49BC8782676a84730C318bC';
-export const CHAIN_ID = 31337; 
-export const CONTRACT_ABI = [];
+export const CONTRACT_ADDRESS = '0xD47bcDF6a3563c59048afb0118f68720BAc5f268';
+export const CHAIN_ID = 10; // optimism
