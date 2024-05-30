@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { CreatorData, getCreatorData } from './creatorRepository'; // Adjust the import path as necessary
+import { CreatorData, getCreatorData } from './creatorRepository';
 import Creator from '../../components/Creator';
 
 const CreatorPage: React.FC = () => {
