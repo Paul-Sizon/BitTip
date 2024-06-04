@@ -29,8 +29,8 @@
 
 ## Next Steps for the Project
 - Improve UI
+- Add Particle login
 - Add other cryptocurrencies
-- Add traditional login / passkey
 - Add Chainlink oracle for USD/ETH price
 - Add localization
 - Add NFT marketplace?
