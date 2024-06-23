@@ -41,6 +41,9 @@
   },
   "dependencies": {
     "@chainlink/contracts": "^1.1.1",
+    "@dynamic-labs/ethereum": "^2.2.3",
+    "@dynamic-labs/sdk-react-core": "^2.2.3",
+    "@dynamic-labs/wagmi-connector": "^2.2.3",
     "@ethersproject/bignumber": "^5.7.0",
     "@supabase/ui": "^0.36.5",
     "@web3-storage/w3up-client": "^13.1.1",
