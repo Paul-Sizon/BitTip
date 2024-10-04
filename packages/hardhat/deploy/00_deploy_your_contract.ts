@@ -23,7 +23,7 @@ const deployBitTipContract: DeployFunction = async function (hre: HardhatRuntime
   const { deploy } = hre.deployments;
 
   await deploy("BitTipContract", {
-    from: "0x2Ca3355E6e09e54bE4A70F44d6709DABA08fC786",
+    from: deployer,
     // Contract constructor arguments
     args: [1],
     log: true,

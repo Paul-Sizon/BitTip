@@ -123,6 +123,124 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
   },
+  31337: {
+    BitTipContract: {
+      address: "0x8464135c8F25Da09e49BC8782676a84730C318bC",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "uint8",
+              name: "_initialFeePercentage",
+              type: "uint8",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "creator",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "comment",
+              type: "string",
+            },
+          ],
+          name: "TipSent",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "platformFeePercentage",
+          outputs: [
+            {
+              internalType: "uint8",
+              name: "",
+              type: "uint8",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "platformOwner",
+          outputs: [
+            {
+              internalType: "address payable",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint8",
+              name: "_newFeePercentage",
+              type: "uint8",
+            },
+          ],
+          name: "setPlatformFeePercentage",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address payable",
+              name: "_creatorWallet",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "comment",
+              type: "string",
+            },
+          ],
+          name: "tipCreator",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "withdrawAll",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          stateMutability: "payable",
+          type: "receive",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+  },
 } as const;
 
 export default deployedContracts satisfies GenericContractsDeclaration;

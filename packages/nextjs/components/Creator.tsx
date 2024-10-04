@@ -34,6 +34,7 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     const { width, height } = useWindowSize()
 
     const walletClient = useWalletClient();
+    //TODO: make this a dynamic variable
     const chainId = CHAIN_ID;
     
 
