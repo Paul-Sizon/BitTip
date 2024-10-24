@@ -13,12 +13,14 @@
 - **Secure Transactions**: Utilizes Ethereum smart contracts for secure and transparent transactions.
 - **Platform Fees**: Adjustable platform fees (1%).
 - **Easy Registration**: Simple interface for creators to register and update their details.
+- **Particle Wallet**: Easily onboard web2 users to web3 world
 
 ## Stack
 - **Front-End**: React, TypeScript, NextJS
 - **Back-End**: Supabase
 - **Smart Contract**: Solidity
 - **Image Uploading**: IPFS
+- **Wallet Providers**: RainbowKit with Particle
 - **Hosting**: Vercel
 
 ## Components
@@ -29,9 +31,7 @@
 
 ## Next Steps for the Project
 - Improve UI
-- Add Particle login
-- Add other cryptocurrencies
-- Add Chainlink oracle for USD/ETH price
+- Add more l2
 - Add localization
 - Add NFT marketplace?
 
