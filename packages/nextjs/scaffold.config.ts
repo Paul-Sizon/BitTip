@@ -7,11 +7,14 @@ export type ScaffoldConfig = {
   walletConnectProjectId: string;
   onlyLocalBurnerWallet: boolean;
   walletAutoConnect: boolean;
+  particleProjectId: string;
+  particleClientKey: string;
+  particleAppId: string;
 };
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [chains.hardhat],
+  targetNetworks: [chains.optimism],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)
@@ -29,6 +32,10 @@ const scaffoldConfig = {
   // .env.local for local testing, and in the Vercel/system env config for live apps.
   walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "3a8170812b534d0ff9d794f19a901d64",
 
+  particleProjectId: process.env.NEXT_PUBLIC_PARTICLE_PROJECT_ID || "",
+  particleClientKey: process.env.NEXT_PUBLIC_PARTICLE_CLIENT_KEY || "",
+  particleAppId: process.env.NEXT_PUBLIC_PARTICLE_APP_ID || "",
+
   // Only show the Burner Wallet when running on hardhat network
   onlyLocalBurnerWallet: true,
 
@@ -37,7 +44,7 @@ const scaffoldConfig = {
    * 1. If the user was connected into a wallet before, on page reload reconnect automatically
    * 2. If user is not connected to any wallet:  On reload, connect to burner wallet if burnerWallet.enabled is true && burnerWallet.onlyLocal is false
    */
-  walletAutoConnect: true,
+  walletAutoConnect: false,
 } as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;

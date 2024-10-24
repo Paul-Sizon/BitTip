@@ -15,6 +15,10 @@ import { publicProvider } from "wagmi/providers/public";
 import scaffoldConfig from "~~/scaffold.config";
 import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletConfig";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
+import { useEffect, useMemo, useState } from "react";
+
+import { ParticleNetwork } from '@particle-network/auth';
+import { particleWallet } from '@particle-network/rainbowkit-ext';
 
 const targetNetworks = getTargetNetworks();
 const { onlyLocalBurnerWallet } = scaffoldConfig;
@@ -36,9 +40,7 @@ export const appChains = configureChains(
     publicProvider(),
   ],
   {
-    // We might not need this checkout https://github.com/scaffold-eth/scaffold-eth-2/pull/45#discussion_r1024496359, will test and remove this before merging
     stallTimeout: 3_000,
-    // Sets pollingInterval if using chains other than local hardhat chain
     ...(targetNetworks.find(network => network.id !== chains.hardhat.id)
       ? {
           pollingInterval: scaffoldConfig.pollingInterval,
@@ -47,30 +49,54 @@ export const appChains = configureChains(
   },
 );
 
+// Initialize ParticleNetwork with your credentials
+const particle = new ParticleNetwork({
+  projectId: scaffoldConfig.particleProjectId, // Replace with your Particle project ID
+  clientKey: scaffoldConfig.particleClientKey, // Replace with your Particle client key
+  appId: scaffoldConfig.particleAppId,         // Replace with your Particle app ID
+  chainName: 'Optimism',
+  chainId: 10,
+  wallet: { displayWalletEntry: true },
+});
+
 const walletsOptions = { chains: appChains.chains, projectId: scaffoldConfig.walletConnectProjectId };
-const wallets = [
-  metaMaskWallet({ ...walletsOptions, shimDisconnect: true }),
-  walletConnectWallet(walletsOptions),
-  ledgerWallet(walletsOptions),
-  braveWallet(walletsOptions),
-  coinbaseWallet({ ...walletsOptions, appName: "scaffold-eth-2" }),
-  rainbowWallet(walletsOptions),
-  ...(!targetNetworks.some(network => network.id !== chains.hardhat.id) || !onlyLocalBurnerWallet
-    ? [
-        burnerWalletConfig({
-          chains: appChains.chains.filter(chain => targetNetworks.map(({ id }) => id).includes(chain.id)),
-        }),
-      ]
-    : []),
-  safeWallet({ ...walletsOptions }),
-];
+
+const popularWallets = {
+  groupName: "Popular",
+  wallets: [
+    metaMaskWallet({ ...walletsOptions, shimDisconnect: true }),
+    coinbaseWallet({ ...walletsOptions, appName: "scaffold-eth-2" }),
+    rainbowWallet(walletsOptions),
+    // Add Particle Wallet with different authentication types
+    particleWallet({ chains: appChains.chains, authType: 'google' }),
+    particleWallet({ chains: appChains.chains, authType: 'facebook' }),
+    particleWallet({ chains: appChains.chains, authType: 'apple' }),
+    particleWallet({ chains: appChains.chains }), // Default authentication
+  ],
+};
+
+const otherWallets = {
+  groupName: "Other",
+  wallets: [
+    walletConnectWallet(walletsOptions),
+    ledgerWallet(walletsOptions),
+    braveWallet(walletsOptions),
+    safeWallet({ ...walletsOptions }),
+    // Include burner wallet if conditions are met
+    ...(!targetNetworks.some(network => network.id !== chains.hardhat.id) || !onlyLocalBurnerWallet
+      ? [
+          burnerWalletConfig({
+            chains: appChains.chains.filter(chain => targetNetworks.map(({ id }) => id).includes(chain.id)),
+          }),
+        ]
+      : []),
+  ],
+};
 
 /**
  * wagmi connectors for the wagmi context
  */
 export const wagmiConnectors = connectorsForWallets([
-  {
-    groupName: "Supported Wallets",
-    wallets,
-  },
+  popularWallets,
+  otherWallets,
 ]);

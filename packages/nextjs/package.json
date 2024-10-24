@@ -16,6 +16,8 @@
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
     "@heroicons/react": "^2.0.11",
+    "@particle-network/auth": "^1.3.1",
+    "@particle-network/rainbowkit-ext": "^1.3.2",
     "@rainbow-me/rainbowkit": "1.3.5",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-ui-react": "^0.4.7",
