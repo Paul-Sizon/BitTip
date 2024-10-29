@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { useWalletClient } from 'wagmi';
+import { useWalletClient, useNetwork } from 'wagmi';
 import deployedContracts from '../contracts/deployedContracts';
 import { CHAIN_ID } from '~~/components/constants';
 import { Address } from '~~/components/scaffold-eth';
@@ -26,7 +26,7 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     const [isButtonVisible, setIsButtonVisible] = useState(true);
     const [comment, setComment] = useState('');
 
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
@@ -34,9 +34,10 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     const { width, height } = useWindowSize()
 
     const walletClient = useWalletClient();
-    //TODO: make this a dynamic variable
-    const chainId = CHAIN_ID;
-    
+
+    const { chain } = useNetwork();
+    const chainId = chain?.id || CHAIN_ID;
+
 
     const getContract = async () => {
         if (!walletClient.data) {
@@ -46,15 +47,33 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
 
         const provider = new ethers.BrowserProvider(walletClient.data);
         const signer = await provider.getSigner();
-        const abi = deployedContracts[chainId]?.BitTipContract?.abi;
-        const contractAddress = deployedContracts[chainId]?.BitTipContract?.address;
 
-        if (!abi) {
-            console.error('ABI not found for BitTipContract on chain', chainId);
-            return null;
+        // I know it's ugly, it's a quick fix. To make chainId dynamic, we need to refactor abi type
+
+        if (chainId === 10) {
+            const abi = deployedContracts[10]?.BitTipContract?.abi;
+            const contractAddress = deployedContracts[10]?.BitTipContract?.address;
+
+            if (!abi) {
+                console.error('ABI not found for BitTipContract on chain', chainId);
+                return null;
+            }
+
+            return new ethers.Contract(contractAddress, abi, signer);
+        } else {
+            const abi = deployedContracts[11155111]?.BitTipContract?.abi;
+            const contractAddress = deployedContracts[11155111]?.BitTipContract?.address
+
+
+            if (!abi) {
+                console.error('ABI not found for BitTipContract on chain', chainId);
+                return null;
+            }
+
+            return new ethers.Contract(contractAddress, abi, signer);
         }
 
-        return new ethers.Contract(contractAddress, abi, signer);
+
     };
     useEffect(() => {
         const fetchEthPrice = async () => {
@@ -66,7 +85,7 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                 console.error('Error fetching ETH price:', err);
             }
         };
-    
+
         fetchEthPrice();
     }, []);
 
@@ -96,10 +115,10 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
             console.log('Transaction confirmed:', receipt.confirmations);
 
             setShowSuccessAlert(true);
-            setShowConfetti(true); 
+            setShowConfetti(true);
             setTimeout(() => {
                 setShowSuccessAlert(false);
-                setShowConfetti(false); 
+                setShowConfetti(false);
                 setUsdAmount('');
                 setEthAmount('');
                 setComment('');
@@ -115,15 +134,15 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
     const handleUsdAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // Regular expression to allow only digits and one decimal point
         const validValue = e.target.value.replace(/[^0-9.]/g, '');
-    
+
         // Ensure there's only one decimal point
-        const validDecimalValue = validValue.includes('.') 
+        const validDecimalValue = validValue.includes('.')
             ? validValue.split('.').reduce((acc, part, index) => index === 0 ? part : acc + '.' + part)
             : validValue;
-    
+
         setUsdAmount(validDecimalValue);
     };
-    
+
 
 
     useEffect(() => {
@@ -147,8 +166,8 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
         <div className="flex flex-col items-center min-h-screen pt-16 space-y-4">
             {/* Confetti */}
             {showConfetti && <Confetti width={width} height={height} />}
-             {/* Success alert */}
-             {showSuccessAlert && (
+            {/* Success alert */}
+            {showSuccessAlert && (
                 <div role="alert" className="alert alert-success mx-auto w-full max-w-md">
                     <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -227,12 +246,12 @@ const Creator: React.FC<CreatorProps> = ({ avatar_url, name, description, wallet
                     Send Tip
                 </button>
 
-            </div>           
+            </div>
 
             {/* Progress bar */}
             {isLoading && (
-                    <progress className="progress w-56"></progress>
-                )}
+                <progress className="progress w-56"></progress>
+            )}
 
             {/* Send Tip Directly Button */}
             {isButtonVisible && (

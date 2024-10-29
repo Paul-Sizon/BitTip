@@ -123,9 +123,9 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
   },
-  31337: {
+  11155111: {
     BitTipContract: {
-      address: "0x8464135c8F25Da09e49BC8782676a84730C318bC",
+      address: "0x925FECef8325463304343ec81Fa8D54Fc5a2d166",
       abi: [
         {
           inputs: [
